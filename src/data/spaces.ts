@@ -1,0 +1,451 @@
+import { Space } from "../types";
+
+export const SPACES_DATA: Space[] = [
+  {
+    id: "space-01",
+    title: "철암 탄광역사거리 앞 붉은 벽돌 레트로 상가",
+    type: "VACANT_STORE",
+    typeLabel: "빈 상가",
+    neighborhood: "철암동",
+    address: "강원특별자치도 태백시 동태백로 389",
+    areaM2: 78.5,
+    areaPyeong: 23.7,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 500,
+    monthlyRent: 30,
+    condition: "MINOR_REPAIR",
+    conditionLabel: "일부 수리 필요",
+    conditionGrade: "B",
+    images: [
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["탄광문화거리", "층고 높음", "1층 전면유리", "주차편리"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1145,
+      lng: 129.0345,
+    },
+    nearbyAmenities: [
+      { name: "철암역 (백두대간협곡열차)", distance: "도보 3분" },
+      { name: "철암 탄광역사촌", distance: "도보 1분" },
+      { name: "공영주차장", distance: "도보 2분" }
+    ],
+    ownerName: "김철수 (소유자)",
+    ownerPhoneMasked: "010-38**-12**",
+    description: "철암역과 탄광역사촌 바로 맞은편에 위치한 붉은 벽돌 외관의 1층 상가입니다. 5년간 비어있었으나 기본 골조와 외벽은 튼튼합니다. 탄광의 역사를 녹여낸 로컬 카페나 문화 굿즈 숍으로 청년이 들어온다면 첫 1년 임대료 감면 협의 가능합니다.",
+    recommendedUses: ["로컬 브루어리 & 카페", "탄광 굿즈 및 편집숍", "레트로 사진관"],
+    estimatedRepairCost: "약 1,200만 ~ 1,800만 원"
+  },
+  {
+    id: "space-02",
+    title: "황지연못 도심 안쪽 햇살 드는 단독주택",
+    type: "VACANT_HOUSE",
+    typeLabel: "빈집",
+    neighborhood: "황지동",
+    address: "강원특별자치도 태백시 황지로 120-8",
+    areaM2: 112.4,
+    areaPyeong: 34.0,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 1000,
+    monthlyRent: 45,
+    condition: "READY",
+    conditionLabel: "바로 사용 가능",
+    conditionGrade: "A",
+    images: [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["황지연못 도보5분", "마당 있음", "단열 양호", "바로입주"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1648,
+      lng: 128.9882,
+    },
+    nearbyAmenities: [
+      { name: "황지연못 문화광장", distance: "도보 5분" },
+      { name: "태백 중앙로 상점가", distance: "도보 4분" },
+      { name: "태백시청", distance: "차량 4분" }
+    ],
+    ownerName: "이정희 (소유자)",
+    ownerPhoneMasked: "010-82**-55**",
+    description: "황지연못 인근 조용한 골목의 남향 마당 딸린 1층 단독주택입니다. 최근 샷시와 지붕 방수 공사를 마쳐 보존 상태가 아주 좋습니다. 게스트하우스나 프라이빗 다이닝, 공유 오피스 창업 청년을 환영합니다.",
+    recommendedUses: ["로컬 게스트하우스", "프라이빗 다이닝 룸", "마당 힐링 북카페"],
+    estimatedRepairCost: "약 300만 ~ 600만 원"
+  },
+  {
+    id: "space-03",
+    title: "장성 탄광마을 옛 광부사택 적벽돌 공간",
+    type: "VACANT_HOUSE",
+    typeLabel: "빈집",
+    neighborhood: "장성동",
+    address: "강원특별자치도 태백시 장성로 45-3",
+    areaM2: 66.2,
+    areaPyeong: 20.0,
+    rentType: "FREE_NEGOTIATION",
+    rentTypeLabel: "무상임대 협의",
+    deposit: 200,
+    monthlyRent: 0,
+    condition: "MAJOR_REPAIR",
+    conditionLabel: "대규모 수리 필요",
+    conditionGrade: "C",
+    images: [
+      "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["2년간 무상임대", "적벽돌 아치", "빈티지 골조", "정부지원 연계"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1023,
+      lng: 129.0125,
+    },
+    nearbyAmenities: [
+      { name: "장성중앙시장", distance: "도보 6분" },
+      { name: "근로복지공단 태백병원", distance: "차량 3분" }
+    ],
+    ownerName: "박동진 (소유자)",
+    ownerPhoneMasked: "010-91**-77**",
+    description: "과거 탄광 전성기 광부 가족들이 거주하던 의미 깊은 적벽돌 사택입니다. 배관과 천장 일부 수리가 필요하지만, 3년 이상 장기 운영할 청년에게 첫 2년 무상 임대를 약속합니다. 청년창창센터 공간개선 사업 연계 추천합니다.",
+    recommendedUses: ["목공·도예 공방", "탄광 아카이빙 갤러리", "청년 공유공방"],
+    estimatedRepairCost: "약 2,500만 ~ 3,500만 원 (지원금 신청 권장)"
+  },
+  {
+    id: "space-04",
+    title: "문곡소도동 태백산 입구 구 목재창고",
+    type: "WAREHOUSE_FACTORY",
+    typeLabel: "창고·공장",
+    neighborhood: "문곡소도동",
+    address: "강원특별자치도 태백시 천제단길 88",
+    areaM2: 198.0,
+    areaPyeong: 60.0,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 1500,
+    monthlyRent: 60,
+    condition: "MINOR_REPAIR",
+    conditionLabel: "일부 수리 필요",
+    conditionGrade: "B",
+    images: [
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["태백산 당골광장 길목", "층고 5m", "트럭 진입 가능", "등산객 유동인구"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1352,
+      lng: 128.9512,
+    },
+    nearbyAmenities: [
+      { name: "태백산국립공원 당골매표소", distance: "차량 2분" },
+      { name: "태백산민속목조각관", distance: "도보 5분" }
+    ],
+    ownerName: "최원석 (소유자)",
+    ownerPhoneMasked: "010-44**-88**",
+    description: "태백산 등산로 초입에 자리한 목재창고입니다. 층고 5미터의 탁 트인 구조로 실내 암벽장, 아웃도어 기어 대여소, 대형 로스터리 베이커리에 최적의 조건을 갖추고 있습니다.",
+    recommendedUses: ["아웃도어·백패킹 기어숍", "베이커리 대형카페", "실내 볼더링 클라이밍"],
+    estimatedRepairCost: "약 1,800만 ~ 2,500만 원"
+  },
+  {
+    id: "space-05",
+    title: "상장동 벽화마을 골목길 고즈넉한 한옥풍 구옥",
+    type: "VACANT_HOUSE",
+    typeLabel: "빈집",
+    neighborhood: "상장동",
+    address: "강원특별자치도 태백시 상장남로 15",
+    areaM2: 56.1,
+    areaPyeong: 17.0,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 300,
+    monthlyRent: 20,
+    condition: "READY",
+    conditionLabel: "바로 사용 가능",
+    conditionGrade: "A",
+    images: [
+      "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["벽화마을 코스", "초저렴 임대료", "감성 서점 적합", "정원 조경 완비"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1512,
+      lng: 128.9734,
+    },
+    nearbyAmenities: [
+      { name: "상장동 탄광벽화마을길", distance: "도보 1분" },
+      { name: "태백역", distance: "차량 5분" }
+    ],
+    ownerName: "한미숙 (소유자)",
+    ownerPhoneMasked: "010-52**-31**",
+    description: "상장동 벽화마을 탐방로 중간에 위치한 아담하고 예쁜 단독주택입니다. 내부 벽지와 마루가 깨끗하여 바로 사용할 수 있습니다. 소소한 독립서점이나 자수/가죽 수공예 작업실을 추천합니다.",
+    recommendedUses: ["동네 독립서점 & 북살롱", "로컬 가죽공예 공방", "시골 감성 티하우스"],
+    estimatedRepairCost: "약 150만 ~ 300만 원"
+  },
+  {
+    id: "space-06",
+    title: "황지동 중앙로 2층 통유리 뷰 상가",
+    type: "VACANT_STORE",
+    typeLabel: "빈 상가",
+    neighborhood: "황지동",
+    address: "강원특별자치도 태백시 번영로 42 2층",
+    areaM2: 92.5,
+    areaPyeong: 28.0,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 1000,
+    monthlyRent: 50,
+    condition: "READY",
+    conditionLabel: "바로 사용 가능",
+    conditionGrade: "A",
+    images: [
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["중앙로 번화가", "남녀 화장실 분리", "엘리베이터", "채광 우수"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1662,
+      lng: 128.9865,
+    },
+    nearbyAmenities: [
+      { name: "황지자유시장", distance: "도보 2분" },
+      { name: "농협중앙회 태백지점", distance: "도보 1분" }
+    ],
+    ownerName: "정재훈 (소유자)",
+    ownerPhoneMasked: "010-66**-90**",
+    description: "태백 시내 중심 번영로 2층 상가입니다. 도로변 전면 창으로 시인성이 우수하며 바닥 데코타일 및 시스템에어컨이 설치되어 있어 인테리어 비용을 크게 절감할 수 있습니다.",
+    recommendedUses: ["청년 코워킹 스페이스", "디자인 & 브랜딩 에이전시", "청년 요가 & 필라테스"],
+    estimatedRepairCost: "약 200만 ~ 400만 원"
+  },
+  {
+    id: "space-07",
+    title: "삼수동 매봉산 초입 유휴 농가 창고 & 테라스",
+    type: "WAREHOUSE_FACTORY",
+    typeLabel: "창고·공장",
+    neighborhood: "삼수동",
+    address: "강원특별자치도 태백시 귀네미길 104",
+    areaM2: 145.0,
+    areaPyeong: 43.8,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 500,
+    monthlyRent: 35,
+    condition: "MINOR_REPAIR",
+    conditionLabel: "일부 수리 필요",
+    conditionGrade: "B",
+    images: [
+      "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["풍력발전단지 뷰", "넓은 주차마당", "고원 배추밭 인근", "로컬푸드"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1950,
+      lng: 128.9710,
+    },
+    nearbyAmenities: [
+      { name: "매봉산 바람의언덕", distance: "차량 8분" },
+      { name: "삼수령 휴게소", distance: "차량 5분" }
+    ],
+    ownerName: "윤상철 (소유자)",
+    ownerPhoneMasked: "010-73**-22**",
+    description: "바람의 언덕으로 향하는 길목에 위치한 석조 벽체 창고입니다. 백두대간 산세가 한눈에 내려다보이는 야외 테라스 공간이 있습니다. 태백 고원 농산물을 활용한 팜투테이블 레스토랑 창업자에게 추천합니다.",
+    recommendedUses: ["고원 배추·산나물 팝업 식당", "자전거·바이크 라이더스 카페", "로컬 가공식품 쇼룸"],
+    estimatedRepairCost: "약 1,500만 ~ 2,200만 원"
+  },
+  {
+    id: "space-08",
+    title: "삼수동 옛 초등학교 분교 유휴 부속시설",
+    type: "CLOSED_SCHOOL",
+    typeLabel: "폐교·공공시설",
+    neighborhood: "삼수동",
+    address: "강원특별자치도 태백시 화전동 204",
+    areaM2: 320.0,
+    areaPyeong: 96.8,
+    rentType: "FREE_NEGOTIATION",
+    rentTypeLabel: "무상임대 협의",
+    deposit: 500,
+    monthlyRent: 0,
+    condition: "MAJOR_REPAIR",
+    conditionLabel: "대규모 수리 필요",
+    conditionGrade: "C",
+    images: [
+      "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["공공 유휴자산", "잔디 운동장 사용", "지자체 매칭 지원", "워케이션 거점"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1820,
+      lng: 128.9610,
+    },
+    nearbyAmenities: [
+      { name: "추전역 (한국에서 가장 높은 역)", distance: "차량 6분" },
+      { name: "화전역 터", distance: "도보 5분" }
+    ],
+    ownerName: "태백시 도시재생지원센터 관리 (공공)",
+    ownerPhoneMasked: "033-550-****",
+    description: "폐교된 분교의 옛 교사 사택 및 창작실 건물입니다. 시유지 협약으로 청년 창업팀 입주 시 3년 무상 임대 및 리모델링 보조금 연계가 가능합니다. 단, 지자체 심의 및 창업계획서 제출 필수입니다.",
+    recommendedUses: ["산림 치유 워케이션 빌리지", "청년 로컬 캠프장 관리동", "문화예술 레지던시"],
+    estimatedRepairCost: "약 3,000만 ~ 4,500만 원 (시 보조금 최대 70% 지원)"
+  },
+  {
+    id: "space-09",
+    title: "장성중앙시장 청년거리 1층 정육코너 공실",
+    type: "VACANT_STORE",
+    typeLabel: "빈 상가",
+    neighborhood: "장성동",
+    address: "강원특별자치도 태백시 시장길 22",
+    areaM2: 45.0,
+    areaPyeong: 13.6,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 300,
+    monthlyRent: 15,
+    condition: "READY",
+    conditionLabel: "바로 사용 가능",
+    conditionGrade: "A",
+    images: [
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["시장 아케이드 내부", "상하수도·가스 완비", "장날 유동인구", "도시가스"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1035,
+      lng: 129.0142,
+    },
+    nearbyAmenities: [
+      { name: "장성시장 번영회 사무실", distance: "도보 1분" },
+      { name: "태백우체국 장성지국", distance: "도보 3분" }
+    ],
+    ownerName: "송광호 (소유자)",
+    ownerPhoneMasked: "010-31**-65**",
+    description: "전통시장 아케이드 내부 1층 점포로 배기 닥트와 수도, 냉각 시설 배관이 완비되어 있습니다. 시장 청년몰 조성과 맞물려 F&B(외식업) 창업 청년에게 최저 임대료로 제공합니다.",
+    recommendedUses: ["태백 한우 타코 전문점", "로컬 감자옹심이 퓨전 바", "수제 육포 & 안주 공방"],
+    estimatedRepairCost: "약 400만 ~ 800만 원"
+  },
+  {
+    id: "space-10",
+    title: "철암천변 유휴 제재소 부속 건물",
+    type: "WAREHOUSE_FACTORY",
+    typeLabel: "창고·공장",
+    neighborhood: "철암동",
+    address: "강원특별자치도 태백시 철암천로 95",
+    areaM2: 160.0,
+    areaPyeong: 48.4,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 800,
+    monthlyRent: 40,
+    condition: "MINOR_REPAIR",
+    conditionLabel: "일부 수리 필요",
+    conditionGrade: "B",
+    images: [
+      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["하천 조망", "철골조 구조", "소음 민원 없음", "제조업 등록 가능"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1180,
+      lng: 129.0310,
+    },
+    nearbyAmenities: [
+      { name: "철암천 수변공원", distance: "도보 1분" },
+      { name: "영동선 철암역", distance: "차량 3분" }
+    ],
+    ownerName: "서민구 (소유자)",
+    ownerPhoneMasked: "010-67**-49**",
+    description: "철암천을 마주한 단독 철골조 건물입니다. 주택가와 적당히 떨어져 있어 소음 발생이 있는 목공, 금속공예, 업사이클링 제조 창업에 최적입니다. 옥상 방수 일부 보수 필요합니다.",
+    recommendedUses: ["폐광 자재 업사이클링 가구 공방", "자연염색 & 섬유 스튜디오", "캠핑용품 제작소"],
+    estimatedRepairCost: "약 900만 ~ 1,400만 원"
+  },
+  {
+    id: "space-11",
+    title: "황지동 옛 태백극장 뒤편 아카이브 창고",
+    type: "WAREHOUSE_FACTORY",
+    typeLabel: "창고·공장",
+    neighborhood: "황지동",
+    address: "강원특별자치도 태백시 시장북길 18",
+    areaM2: 85.0,
+    areaPyeong: 25.7,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 600,
+    monthlyRent: 35,
+    condition: "MINOR_REPAIR",
+    conditionLabel: "일부 수리 필요",
+    conditionGrade: "B",
+    images: [
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["중심 상권 배후", "노출 콘크리트 인더스트리얼", "소규모 공연 가능", "전기 승압 완료"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1675,
+      lng: 128.9890,
+    },
+    nearbyAmenities: [
+      { name: "황지연못", distance: "도보 3분" },
+      { name: "태백시외버스터미널", distance: "도보 7분" }
+    ],
+    ownerName: "오규택 (소유자)",
+    ownerPhoneMasked: "010-23**-71**",
+    description: "과거 극장 창고로 쓰이던 높은 층고의 노출 콘크리트 건물입니다. 전기 10kW 승압이 되어 있고, 방음이 우수하여 소규모 인디밴드 합주실이나 미디어 전시 복합공간에 아주 좋습니다.",
+    recommendedUses: ["미디어아트 인터랙티브 전시관", "인디 음악 공연 및 LP 바", "독립영화 상영관"],
+    estimatedRepairCost: "약 800만 ~ 1,300만 원"
+  },
+  {
+    id: "space-12",
+    title: "문곡소도동 구 당골마을 유휴 연립 점포",
+    type: "VACANT_STORE",
+    typeLabel: "빈 상가",
+    neighborhood: "문곡소도동",
+    address: "강원특별자치도 태백시 태백산로 4791",
+    areaM2: 52.0,
+    areaPyeong: 15.7,
+    rentType: "MONTHLY",
+    rentTypeLabel: "월세",
+    deposit: 400,
+    monthlyRent: 25,
+    condition: "READY",
+    conditionLabel: "바로 사용 가능",
+    conditionGrade: "A",
+    images: [
+      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=800&q=80"
+    ],
+    tags: ["등산로 메인 도로변", "깔끔한 외관", "주차 공간 3대", "냉난방기 구비"],
+    canAiReview: true,
+    canOwnerDiscuss: true,
+    coordinates: {
+      lat: 37.1390,
+      lng: 128.9560,
+    },
+    nearbyAmenities: [
+      { name: "문곡소도동 행정복지센터", distance: "도보 4분" },
+      { name: "태백산 국립공원 입구", distance: "차량 3분" }
+    ],
+    ownerName: "임채민 (소유자)",
+    ownerPhoneMasked: "010-88**-19**",
+    description: "태백산으로 들어가는 주요 간선도로변 1층 상가입니다. 유리창과 바닥 타일이 신축 수준으로 깨끗하며 벽걸이 에어컨 2대가 무상 옵션으로 제공됩니다. 태백산 관광객을 겨냥한 로컬 간식 포장 판매점에 적합합니다.",
+    recommendedUses: ["태백 곰취 찐빵 & 수제 디저트", "등산객 에너지바 & 도시락 숍", "태백 기념품 팝업"],
+    estimatedRepairCost: "약 100만 ~ 250만 원"
+  }
+];
