@@ -2,5 +2,5 @@
   "installCommand": "cd client && npm install",
   "buildCommand": "cd client && npx expo export -p web",
   "outputDirectory": "client/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/" }]
 }
