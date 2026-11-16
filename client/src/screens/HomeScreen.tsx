@@ -5,11 +5,10 @@ import {
   StyleSheet, 
   ScrollView, 
   TextInput, 
-  TouchableOpacity, 
-  FlatList,
-  Platform 
+  TouchableOpacity 
 } from "react-native";
-import { COLORS } from "../constants/theme";
+import { Search, X, ArrowRight } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Space, StartupStory, SupportProgram } from "../types";
 import { Header } from "../components/common/Header";
@@ -27,9 +26,7 @@ export const HomeScreen: React.FC = () => {
     stories, 
     programs, 
     setActiveTab, 
-    filters, 
-    setFilters,
-    youthInterest 
+    setFilters 
   } = useApp();
 
   const [searchText, setSearchText] = useState("");
@@ -38,7 +35,6 @@ export const HomeScreen: React.FC = () => {
   const [selectedStory, setSelectedStory] = useState<StartupStory | null>(null);
   const [isStoryModalVisible, setIsStoryModalVisible] = useState(false);
 
-  // 검색 실행 시 공간 찾기 탭으로 전환
   const handleSearchSubmit = () => {
     if (searchText.trim().length > 0) {
       setFilters(prev => ({ ...prev, searchQuery: searchText.trim() }));
@@ -65,22 +61,22 @@ export const HomeScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* 상단 블루 배경 헤더 영역 (직방 스타일 감성) */}
+        {/* 상단 크림 배경 헤더 영역 (탄광/동네 전단지 느낌의 담백한 헤더) */}
         <View style={styles.heroBackground}>
           <Text style={styles.greetingText}>
-            청년 창업가님, 반갑습니다 👋
+            강원도 태백시 청년 공간 매칭
           </Text>
           <Text style={styles.heroHeadline}>
-            태백의 빈 공간에서{"\n"}당신의 창업을 시작하세요
+            태백의 빈 공간에서{"\n"}사업을 시작해 보세요
           </Text>
 
-          {/* 직방 스타일 큰 검색창 */}
+          {/* 단정한 검색창 */}
           <View style={styles.searchBarContainer}>
-            <Text style={styles.searchIcon}>🔍</Text>
+            <Search size={18} color={COLORS.textSecondary} strokeWidth={1.75} style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="동네(철암·황지·장성)나 업종(카페·공방) 검색"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={COLORS.textTertiary}
               value={searchText}
               onChangeText={setSearchText}
               onSubmitEditing={handleSearchSubmit}
@@ -88,19 +84,20 @@ export const HomeScreen: React.FC = () => {
             />
             {searchText.length > 0 && (
               <TouchableOpacity onPress={() => setSearchText("")} style={styles.clearBtn}>
-                <Text style={styles.clearText}>✕</Text>
+                <X size={16} color={COLORS.textSecondary} strokeWidth={1.75} />
               </TouchableOpacity>
             )}
             <TouchableOpacity 
               style={styles.searchActionBtn}
               onPress={handleSearchSubmit}
+              activeOpacity={0.8}
             >
-              <Text style={styles.searchActionBtnText}>찾기</Text>
+              <Text style={styles.searchActionBtnText}>검색</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* 카테고리 아이콘 그리드 (마진 음수로 블루 헤더 위에 겹치게 배치) */}
+        {/* 카테고리 아이콘 그리드 */}
         <CategoryGrid />
 
         {/* 내 창업 진행 미니 카드 */}
@@ -110,11 +107,12 @@ export const HomeScreen: React.FC = () => {
         <View style={styles.sectionBlock}>
           <View style={styles.sectionHeader}>
             <View>
-              <Text style={styles.sectionBadge}>AI 검토 추천</Text>
-              <Text style={styles.sectionTitle}>지금 바로 검토 가능한 유휴공간</Text>
+              <Text style={styles.sectionBadge}>추천 공간</Text>
+              <Text style={styles.sectionTitle}>진단 가능한 유휴공간</Text>
             </View>
-            <TouchableOpacity onPress={() => setActiveTab("EXPLORE")}>
-              <Text style={styles.seeAllText}>더보기 →</Text>
+            <TouchableOpacity onPress={() => setActiveTab("EXPLORE")} style={styles.seeAllBtn}>
+              <Text style={styles.seeAllText}>더보기</Text>
+              <ArrowRight size={13} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginLeft: 3 }} />
             </TouchableOpacity>
           </View>
 
@@ -139,10 +137,11 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.sectionHeader}>
             <View>
               <Text style={styles.sectionBadge}>지원사업</Text>
-              <Text style={styles.sectionTitle}>놓치면 안 되는 태백 청년 지원사업</Text>
+              <Text style={styles.sectionTitle}>태백 청년 창업 지원사업</Text>
             </View>
-            <TouchableOpacity onPress={() => setActiveTab("MY_STARTUP")}>
-              <Text style={styles.seeAllText}>전체보기 →</Text>
+            <TouchableOpacity onPress={() => setActiveTab("MY_STARTUP")} style={styles.seeAllBtn}>
+              <Text style={styles.seeAllText}>전체보기</Text>
+              <ArrowRight size={13} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginLeft: 3 }} />
             </TouchableOpacity>
           </View>
 
@@ -155,7 +154,7 @@ export const HomeScreen: React.FC = () => {
                 activeOpacity={0.8}
               >
                 <View style={styles.programTopRow}>
-                  <View style={[styles.dDayBadge, { backgroundColor: prog.badgeColor || COLORS.primary }]}>
+                  <View style={styles.dDayBadge}>
                     <Text style={styles.dDayText}>D-{prog.dDay}</Text>
                   </View>
                   <Text style={styles.grantText}>{prog.grantAmount}</Text>
@@ -167,11 +166,11 @@ export const HomeScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* 태백 창업 이야기 가로 스크롤 */}
+        {/* 선배 창업가 인터뷰 이야기 */}
         <View style={styles.sectionBlock}>
           <View style={styles.sectionHeader}>
             <View>
-              <Text style={styles.sectionBadge}>선배 창업가 인터뷰</Text>
+              <Text style={styles.sectionBadge}>창업 사례</Text>
               <Text style={styles.sectionTitle}>태백에서 먼저 공간을 연 사람들</Text>
             </View>
           </View>
@@ -226,91 +225,95 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   heroBackground: {
-    backgroundColor: COLORS.primary,
-    paddingTop: 16,
-    paddingBottom: 36,
-    paddingHorizontal: 18,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    backgroundColor: COLORS.surface,
+    paddingTop: 18,
+    paddingBottom: 34,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.line,
   },
   greetingText: {
-    fontSize: 13,
-    color: "#D6DCFF",
-    fontWeight: "600",
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 12,
+    color: COLORS.accent,
+    fontWeight: "700",
     marginBottom: 4,
+    letterSpacing: 0.2,
   },
   heroHeadline: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 22,
-    fontWeight: "900",
-    color: "#FFFFFF",
-    lineHeight: 28,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
+    lineHeight: 30,
     letterSpacing: -0.4,
     marginBottom: 16,
   },
   searchBarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    height: 50,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 4,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
+    paddingHorizontal: 10,
+    height: 46,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   searchIcon: {
-    fontSize: 16,
-    marginRight: 8,
+    marginRight: 6,
   },
   searchInput: {
     flex: 1,
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     color: COLORS.textPrimary,
-    paddingVertical: 8,
+    paddingVertical: 6,
   },
   clearBtn: {
     padding: 6,
   },
-  clearText: {
-    fontSize: 12,
-    color: COLORS.textTertiary,
-  },
   searchActionBtn: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 7,
+    paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: METRICS.borderRadiusSm,
   },
   searchActionBtnText: {
-    color: "#FFFFFF",
+    fontFamily: TYPOGRAPHY.bodyFont,
+    color: COLORS.surface,
     fontSize: 12,
     fontWeight: "700",
   },
   sectionBlock: {
-    marginTop: 24,
+    marginTop: 22,
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
     paddingHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   sectionBadge: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
     marginBottom: 2,
   },
   sectionTitle: {
-    fontSize: 17,
-    fontWeight: "800",
+    fontFamily: TYPOGRAPHY.titleFont,
+    fontSize: 16,
+    fontWeight: "700",
     color: COLORS.textPrimary,
     letterSpacing: -0.3,
   },
+  seeAllBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   seeAllText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "600",
     color: COLORS.textSecondary,
@@ -324,16 +327,11 @@ const styles = StyleSheet.create({
   },
   programCard: {
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
+    borderColor: COLORS.line,
   },
   programTopRow: {
     flexDirection: "row",
@@ -342,28 +340,37 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   dDayBadge: {
-    paddingVertical: 3,
-    paddingHorizontal: 7,
-    borderRadius: 4,
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   dDayText: {
-    fontSize: 10,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 11,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: COLORS.accent,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   grantText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "800",
     color: COLORS.primary,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   programTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 4,
   },
   programOrg: {
-    fontSize: 11,
-    color: COLORS.textTertiary,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 12,
+    color: COLORS.textSecondary,
   },
 });

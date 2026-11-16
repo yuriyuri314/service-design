@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { X } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { StartupStory } from "../../types";
 import { HighlightBox } from "../common/HighlightBox";
 
@@ -23,7 +24,7 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
         {/* 상단 닫기 헤더 */}
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn} activeOpacity={0.7}>
-            <Text style={styles.closeText}>✕</Text>
+            <X size={20} color={COLORS.textPrimary} strokeWidth={1.75} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>태백 청년 창업 이야기</Text>
           <View style={{ width: 36 }} />
@@ -51,10 +52,9 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
               <Text style={styles.quoteText}>{story.quote}</Text>
             </View>
 
-            {/* "공간 구할 때 어려웠던 점" 강조 박스 (필수 요구사항!) */}
+            {/* "공간 구할 때 어려웠던 점" 강조 박스 (HighlightBox 왼쪽 3px 벽돌색 세로줄) */}
             <HighlightBox
-              title="💡 공간 구할 때 가장 어려웠던 점"
-              icon={<Text>⚠️</Text>}
+              title="공간 구할 때 가장 어려웠던 점"
               style={styles.challengeBox}
             >
               {story.spaceChallenge}
@@ -62,7 +62,7 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
 
             {/* 인터뷰 Q&A */}
             <View style={styles.qnaSection}>
-              <Text style={styles.qnaSectionTitle}>💬 솔직 인터뷰</Text>
+              <Text style={styles.qnaSectionTitle}>창업 인터뷰</Text>
               {story.storyQna.map((item, idx) => (
                 <View key={idx} style={styles.qnaItem}>
                   <Text style={styles.questionText}>{item.question}</Text>
@@ -71,13 +71,12 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
               ))}
             </View>
 
-            {/* 응원 배너 */}
+            {/* 안내 배너 */}
             <View style={styles.bottomBanner}>
-              <Text style={styles.bannerEmoji}>🤝</Text>
-              <Text style={styles.bannerTitle}>혼자 고민하지 마세요!</Text>
+              <Text style={styles.bannerTitle}>공간 확보부터 함께합니다</Text>
               <Text style={styles.bannerSub}>
-                빈자리 태백의 AI 검토와 청년창창센터 동행 협의로
-                안전하게 공간을 찾고 계약할 수 있습니다.
+                계약 전 진단 리포트와 청년창창센터 동행 협의로
+                사전에 점검하고 계약을 진행할 수 있습니다.
               </Text>
             </View>
 
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: COLORS.line,
   },
   closeBtn: {
     width: 36,
@@ -109,11 +108,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  closeText: {
-    fontSize: 18,
-    color: COLORS.textPrimary,
-  },
   headerTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 15,
     fontWeight: "700",
     color: COLORS.textPrimary,
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(42, 42, 40, 0.5)",
   },
   heroContent: {
     position: "absolute",
@@ -146,45 +142,50 @@ const styles = StyleSheet.create({
   },
   typeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     paddingVertical: 3,
     paddingHorizontal: 7,
-    borderRadius: 4,
+    borderRadius: METRICS.borderRadiusSm,
     marginBottom: 6,
   },
   typeBadgeText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 10,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: COLORS.surface,
   },
   heroBusinessName: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 20,
-    fontWeight: "800",
-    color: "#FFFFFF",
+    fontWeight: "700",
+    color: COLORS.surface,
     letterSpacing: -0.3,
   },
   heroFounder: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
-    color: "#E5E7EB",
+    color: COLORS.line,
     marginTop: 2,
   },
   bodyPadding: {
-    padding: 18,
+    padding: 16,
   },
   quoteBox: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: COLORS.background,
     padding: 14,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.primary,
+    borderRadius: METRICS.borderRadiusSm,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     marginBottom: 14,
   },
   quoteText: {
-    fontSize: 14,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 13,
     fontWeight: "600",
     color: COLORS.textPrimary,
     lineHeight: 20,
-    fontStyle: "italic",
   },
   challengeBox: {
     marginVertical: 10,
@@ -193,50 +194,55 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   qnaSectionTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 14,
   },
   qnaItem: {
-    marginBottom: 16,
-    backgroundColor: "#F9FAFB",
-    borderRadius: 12,
+    marginBottom: 14,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 14,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   questionText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
     marginBottom: 6,
     lineHeight: 18,
   },
   answerText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     color: COLORS.textPrimary,
     lineHeight: 20,
   },
   bottomBanner: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusSm,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     alignItems: "center",
     marginTop: 14,
   },
-  bannerEmoji: {
-    fontSize: 26,
-    marginBottom: 6,
-  },
   bannerTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.textPrimary,
     marginBottom: 4,
   },
   bannerSub: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
-    color: "#4B5563",
+    color: COLORS.textSecondary,
     textAlign: "center",
-    lineHeight: 17,
+    lineHeight: 18,
   },
 });

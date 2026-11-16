@@ -6,11 +6,26 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Image, 
-  TextInput,
   Platform,
   Alert
 } from "react-native";
-import { COLORS } from "../constants/theme";
+import { 
+  Camera, 
+  Check, 
+  CheckCircle2, 
+  Clock, 
+  Circle, 
+  AlertTriangle, 
+  Share2, 
+  Download, 
+  Handshake, 
+  Building2, 
+  ArrowRight, 
+  ChevronLeft,
+  FileCheck2,
+  Lightbulb
+} from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/common/Header";
 import { RiskBadge } from "../components/common/RiskBadge";
@@ -48,7 +63,7 @@ export const AiReviewScreen: React.FC = () => {
     "숨은 배관·전기 용량과 누수 위험을 체크하는 중…",
     "주변 상권 및 태백 관광객 유동인구를 분석하는 중…",
     "태백 고원·탄광 자원과 융합할 겹치지 않는 업종을 도출하는 중…",
-    "AI 창업 검토 리포트 작성을 완료하는 중…"
+    "진단 리포트 작성을 완료하는 중…"
   ];
 
   // 로딩 타이머 시뮬레이션
@@ -61,7 +76,6 @@ export const AiReviewScreen: React.FC = () => {
             return prev + 1;
           } else {
             clearInterval(interval);
-            // 완료 후 리포트 상세로 이동
             const matched = reports.find(r => r.spaceId === chosenSpaceId) || reports[0];
             setActiveReport(matched);
             setMode("REPORT_DETAIL");
@@ -100,7 +114,7 @@ export const AiReviewScreen: React.FC = () => {
   if (mode === "LIST") {
     return (
       <View style={styles.container}>
-        <Header title="AI 창업 검토 (판단)" />
+        <Header title="계약 전 진단 (판단)" />
         <ScrollView style={styles.scrollBody} showsVerticalScrollIndicator={false}>
           {/* 배너 */}
           <View style={styles.introBanner}>
@@ -108,7 +122,7 @@ export const AiReviewScreen: React.FC = () => {
               <Text style={styles.bannerBadgeText}>1. 판단 솔루션</Text>
             </View>
             <Text style={styles.introTitle}>
-              계약 전 꼭 따져보세요!{"\n"}AI 창업 검토 리포트
+              계약 전 꼭 따져보세요.{"\n"}진단 리포트
             </Text>
             <Text style={styles.introDesc}>
               수리비 견적, 숨은 비용(배관/전기), 손익분기점까지 청년에게는 판단 기준이, 소유자에게는 믿음직한 증거가 됩니다.
@@ -122,17 +136,17 @@ export const AiReviewScreen: React.FC = () => {
               }}
               activeOpacity={0.85}
             >
-              <Text style={styles.newReviewBtnText}>✨ 새 공간 AI 검토 시작하기</Text>
+              <Text style={styles.newReviewBtnText}>새 공간 진단 시작하기</Text>
+              <ArrowRight size={16} color="#FFFFFF" strokeWidth={1.75} style={{ marginLeft: 6 }} />
             </TouchableOpacity>
           </View>
 
           {/* 내가 만든 리포트 목록 */}
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>📋 발행된 AI 검토 리포트 ({reports.length})</Text>
+            <Text style={styles.sectionTitle}>발행된 진단 리포트 ({reports.length})</Text>
           </View>
 
           {reports.map((rep) => {
-            const spaceItem = spaces.find(s => s.id === rep.spaceId);
             return (
               <TouchableOpacity
                 key={rep.id}
@@ -184,7 +198,7 @@ export const AiReviewScreen: React.FC = () => {
     return (
       <View style={styles.container}>
         <Header 
-          title="AI 창업 검토 신청" 
+          title="계약 전 진단 신청" 
           onBack={() => setMode("LIST")} 
         />
 
@@ -192,15 +206,15 @@ export const AiReviewScreen: React.FC = () => {
         <View style={styles.progressBarContainer}>
           <View style={styles.stepIndicatorRow}>
             <Text style={[styles.stepText, currentStep === 1 && styles.stepTextActive]}>
-              ① 공간 선택
+              1. 공간 선택
             </Text>
             <Text style={styles.stepArrow}>→</Text>
             <Text style={[styles.stepText, currentStep === 2 && styles.stepTextActive]}>
-              ② 업종 선택
+              2. 업종 선택
             </Text>
             <Text style={styles.stepArrow}>→</Text>
             <Text style={[styles.stepText, currentStep === 3 && styles.stepTextActive]}>
-              ③ 예산 범위
+              3. 예산 범위
             </Text>
           </View>
           <View style={styles.progressTrack}>
@@ -212,8 +226,8 @@ export const AiReviewScreen: React.FC = () => {
           {/* STEP 1: 공간 선택 */}
           {currentStep === 1 && (
             <View style={styles.stepSection}>
-              <Text style={styles.stepHeading}>검토할 공간을 선택해 주세요</Text>
-              <Text style={styles.stepSub}>태백시 발굴 유휴공간 중 선택하거나 직접 사진을 업로드할 수 있습니다.</Text>
+              <Text style={styles.stepHeading}>진단할 공간을 선택해 주세요</Text>
+              <Text style={styles.stepSub}>태백시 발굴 유휴공간 중 선택하거나 직접 사진을 등록할 수 있습니다.</Text>
 
               {/* 직접 사진 업로드 시뮬레이션 */}
               <TouchableOpacity
@@ -221,16 +235,16 @@ export const AiReviewScreen: React.FC = () => {
                 onPress={() => setCustomPhotoUploaded(prev => !prev)}
                 activeOpacity={0.8}
               >
-                <Text style={styles.uploadIcon}>📷</Text>
+                <Camera size={26} color={customPhotoUploaded ? COLORS.accent : COLORS.primary} strokeWidth={1.75} style={{ marginBottom: 6 }} />
                 <Text style={styles.uploadTitle}>
-                  {customPhotoUploaded ? "✓ 공간 사진 3장 업로드 완료" : "현장 사진 직접 촬영 / 업로드"}
+                  {customPhotoUploaded ? "공간 사진 3장 등록 완료" : "현장 사진 직접 촬영 / 등록"}
                 </Text>
                 <Text style={styles.uploadSub}>
-                  {customPhotoUploaded ? "터치하면 등록 공간 선택으로 변경" : "발굴 목록에 없는 빈집·유휴공간도 AI가 분석해 드립니다."}
+                  {customPhotoUploaded ? "터치하면 등록 공간 선택으로 변경" : "발굴 목록에 없는 빈집·유휴공간도 상태를 진단해 드립니다."}
                 </Text>
               </TouchableOpacity>
 
-              <Text style={styles.selectListTitle}>또는 태백시 등록 유휴공간 선택:</Text>
+              <Text style={styles.selectListTitle}>태백시 등록 유휴공간 선택:</Text>
 
               {spaces.map((sp) => {
                 const isSelected = sp.id === chosenSpaceId && !customPhotoUploaded;
@@ -253,7 +267,7 @@ export const AiReviewScreen: React.FC = () => {
                       <Text style={styles.spaceChoiceGrade}>상태 {sp.conditionGrade}급 ({sp.conditionLabel})</Text>
                     </View>
                     <View style={[styles.checkCircle, isSelected && styles.checkCircleSelected]}>
-                      {isSelected && <Text style={styles.checkText}>✓</Text>}
+                      {isSelected && <Check size={14} color="#FFFFFF" strokeWidth={2} />}
                     </View>
                   </TouchableOpacity>
                 );
@@ -314,7 +328,7 @@ export const AiReviewScreen: React.FC = () => {
                         {bg}
                       </Text>
                       <View style={[styles.checkCircle, isSelected && styles.checkCircleSelected]}>
-                        {isSelected && <Text style={styles.checkText}>✓</Text>}
+                        {isSelected && <Check size={14} color="#FFFFFF" strokeWidth={2} />}
                       </View>
                     </TouchableOpacity>
                   );
@@ -322,8 +336,7 @@ export const AiReviewScreen: React.FC = () => {
               </View>
 
               <HighlightBox
-                title="태백시 지원사업 활용 팁"
-                icon={<Text>💡</Text>}
+                title="태백시 지원사업 활용 안내"
                 style={{ marginTop: 14 }}
               >
                 공간 수리비의 최대 70~100%(최대 4,500만원)는 태백시 청년창창센터 공간개선 지원금으로 연계 신청할 수 있습니다.
@@ -341,7 +354,8 @@ export const AiReviewScreen: React.FC = () => {
               style={styles.stepPrevBtn}
               onPress={() => setCurrentStep(prev => prev - 1)}
             >
-              <Text style={styles.stepPrevBtnText}>◀ 이전</Text>
+              <ChevronLeft size={16} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginRight: 2 }} />
+              <Text style={styles.stepPrevBtnText}>이전</Text>
             </TouchableOpacity>
           ) : <View style={{ width: 60 }} />}
 
@@ -357,8 +371,9 @@ export const AiReviewScreen: React.FC = () => {
             activeOpacity={0.85}
           >
             <Text style={styles.stepNextBtnText}>
-              {currentStep < 3 ? "다음 단계 →" : "⚡ AI 검토 시작하기"}
+              {currentStep < 3 ? "다음 단계" : "진단 시작하기"}
             </Text>
+            <ArrowRight size={16} color="#FFFFFF" strokeWidth={1.75} style={{ marginLeft: 4 }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -370,18 +385,24 @@ export const AiReviewScreen: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <View style={styles.loadingIconCircle}>
-          <Text style={styles.loadingIcon}>✨</Text>
+          <FileCheck2 size={36} color={COLORS.accent} strokeWidth={1.75} />
         </View>
-        <Text style={styles.loadingTitle}>AI가 빈 공간을 정밀 진단 중입니다</Text>
+        <Text style={styles.loadingTitle}>빈 공간을 정밀 진단 중입니다</Text>
         <View style={styles.loadingListBox}>
           {loadingTexts.map((txt, idx) => {
             const isDone = idx < loadingTextIndex;
             const isCurrent = idx === loadingTextIndex;
             return (
               <View key={idx} style={styles.loadingTextRow}>
-                <Text style={styles.loadingStatusIcon}>
-                  {isDone ? "✅" : isCurrent ? "⏳" : "⚪"}
-                </Text>
+                <View style={styles.loadingStatusIcon}>
+                  {isDone ? (
+                    <CheckCircle2 size={16} color={COLORS.riskSafe} strokeWidth={1.75} />
+                  ) : isCurrent ? (
+                    <Clock size={16} color={COLORS.accent} strokeWidth={1.75} />
+                  ) : (
+                    <Circle size={16} color={COLORS.line} strokeWidth={1.75} />
+                  )}
+                </View>
                 <Text style={[
                   styles.loadingStatusText,
                   isCurrent && styles.loadingStatusTextCurrent,
@@ -394,22 +415,22 @@ export const AiReviewScreen: React.FC = () => {
           })}
         </View>
         <Text style={styles.loadingNotice}>
-          태백시 건축물 대장, 주변 유동인구 빅데이터, 상권 데이터를 종합하고 있습니다.
+          태백시 건축물 대장, 주변 유동인구 빅데이터, 상권 데이터를 종합하고 있습니다. (입력한 사진과 정보를 바탕으로 추정한 결과예요)
         </Text>
       </View>
     );
   }
 
-  // 4. 결과: "AI 창업 검토 리포트" 풀버전 화면
+  // 4. 결과: "진단 리포트" 풀버전 화면
   return (
     <View style={styles.container}>
       <Header 
-        title="AI 창업 검토 리포트" 
+        title="진단 리포트" 
         onBack={() => setMode("LIST")} 
       />
 
       <ScrollView style={styles.scrollBody} showsVerticalScrollIndicator={false}>
-        {/* 상단 요약 카드 (종합 판단 + 위험도 신호등) */}
+        {/* 상단 요약 카드 (종합 판단 + 위험도 배지) */}
         <View style={styles.summaryCard}>
           <View style={styles.summaryTopRow}>
             <View style={{ flex: 1 }}>
@@ -427,11 +448,14 @@ export const AiReviewScreen: React.FC = () => {
             <RiskBadge level={activeReport.riskLevel} size="md" />
             <Text style={styles.verdictMainText}>{activeReport.overallVerdict}</Text>
           </View>
+          <Text style={styles.summaryDisclaimer}>
+            * 입력한 사진과 공공 데이터를 바탕으로 추정한 결과예요.
+          </Text>
         </View>
 
         {/* (1) 공간 진단 */}
         <View style={styles.reportSection}>
-          <Text style={styles.sectionHeaderTitle}>🛠️ 1. 공간 상태 및 수리비 진단</Text>
+          <Text style={styles.sectionHeaderTitle}>1. 공간 상태 및 수리비 진단</Text>
           
           <View style={styles.diagnosisBox}>
             <View style={styles.diagRow}>
@@ -449,11 +473,14 @@ export const AiReviewScreen: React.FC = () => {
           </View>
 
           {/* 숨은 비용 체크리스트 */}
-          <Text style={styles.subHeaderTitle}>⚠️ 숨은 비용 체크리스트 (계약 전 필수 확인)</Text>
+          <View style={styles.subHeaderRow}>
+            <AlertTriangle size={15} color={COLORS.riskCaution} strokeWidth={1.75} style={{ marginRight: 6 }} />
+            <Text style={styles.subHeaderTitle}>숨은 비용 점검 목록 (계약 전 필수 확인)</Text>
+          </View>
           {activeReport.diagnosis.hiddenCosts.map((hc, idx) => (
             <View key={idx} style={styles.hiddenCostItem}>
               <View style={styles.hiddenCostTop}>
-                <Text style={styles.hiddenCostName}>• {hc.item}</Text>
+                <Text style={styles.hiddenCostName}>{hc.item}</Text>
                 <RiskBadge 
                   level={hc.risk === "HIGH" ? "DANGER" : hc.risk === "MEDIUM" ? "CAUTION" : "SAFE"} 
                   size="sm" 
@@ -466,7 +493,7 @@ export const AiReviewScreen: React.FC = () => {
 
         {/* (2) 버틸 수 있을까? 상권 & 손익분기 분석 */}
         <View style={styles.reportSection}>
-          <Text style={styles.sectionHeaderTitle}>📊 2. 버틸 수 있을까? 상권 & 손익 분석</Text>
+          <Text style={styles.sectionHeaderTitle}>2. 버틸 수 있을까? 상권·손익 분석</Text>
           
           <View style={styles.metricGrid}>
             <View style={styles.metricCard}>
@@ -474,7 +501,7 @@ export const AiReviewScreen: React.FC = () => {
               <Text style={styles.metricLab}>월 유동인구</Text>
             </View>
             <View style={styles.metricCard}>
-              <Text style={[styles.metricVal, { color: COLORS.primary }]}>
+              <Text style={[styles.metricVal, { color: COLORS.accent }]}>
                 {activeReport.feasibility.estimatedMonthlyRevenue}
               </Text>
               <Text style={styles.metricLab}>예상 월매출</Text>
@@ -502,15 +529,15 @@ export const AiReviewScreen: React.FC = () => {
           {activeReport.feasibility.warningMessage && (
             <View style={styles.warningBox}>
               <Text style={styles.warningBoxText}>
-                ⚠️ <Text style={{ fontWeight: "700" }}>주의 권고:</Text> {activeReport.feasibility.warningMessage}
+                <Text style={{ fontWeight: "700" }}>주의 권고: </Text>{activeReport.feasibility.warningMessage}
               </Text>
             </View>
           )}
         </View>
 
-        {/* (3) 태백 자원 연계 겹치지 않는 업종 추천 3개 */}
+        {/* (3) 태백 자원 연계 겹치지 않는 업종 추천 3선 */}
         <View style={styles.reportSection}>
-          <Text style={styles.sectionHeaderTitle}>💡 3. 태백 자원 연계 추천 업종 3선</Text>
+          <Text style={styles.sectionHeaderTitle}>3. 태백 자원 연계 추천 업종</Text>
           
           {activeReport.recommendations.map((rec, idx) => (
             <View key={idx} style={styles.recCard}>
@@ -521,15 +548,15 @@ export const AiReviewScreen: React.FC = () => {
                 <Text style={styles.recTitle}>{rec.title}</Text>
                 <Text style={styles.recScore}>{rec.matchScore}점</Text>
               </View>
-              <Text style={styles.recResource}>🔗 융합 자원: {rec.taebaekResource}</Text>
-              <Text style={styles.recReason}>✓ {rec.reason}</Text>
+              <Text style={styles.recResource}>융합 자원: {rec.taebaekResource}</Text>
+              <Text style={styles.recReason}>• {rec.reason}</Text>
             </View>
           ))}
         </View>
 
         {/* (4) 리모델링 미리보기: 전/후 비교 슬라이더 */}
         <View style={styles.reportSection}>
-          <Text style={styles.sectionHeaderTitle}>🎨 4. 리모델링 예상 시뮬레이션</Text>
+          <Text style={styles.sectionHeaderTitle}>4. 공간 정비 예상</Text>
           <BeforeAfterSlider
             beforeImage={activeReport.remodelPreview.beforeImage}
             afterImage={activeReport.remodelPreview.afterImage}
@@ -544,7 +571,8 @@ export const AiReviewScreen: React.FC = () => {
             onPress={() => setActiveTab("MY_STARTUP")}
             activeOpacity={0.8}
           >
-            <Text style={styles.connectSupportText}>📑 이 리포트로 태백시 지원사업 찾기 →</Text>
+            <Text style={styles.connectSupportText}>이 진단으로 태백시 지원사업 찾기</Text>
+            <ArrowRight size={15} color={COLORS.accent} strokeWidth={1.75} style={{ marginLeft: 4 }} />
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -552,7 +580,8 @@ export const AiReviewScreen: React.FC = () => {
             onPress={() => startChatForSpace(activeReport.spaceId)}
             activeOpacity={0.8}
           >
-            <Text style={styles.consultText}>🏛️ 청년창창센터에 사전 상담 요청</Text>
+            <Building2 size={16} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+            <Text style={styles.consultText}>청년창창센터 사전 상담 요청</Text>
           </TouchableOpacity>
         </View>
 
@@ -563,17 +592,17 @@ export const AiReviewScreen: React.FC = () => {
       <View style={styles.fixedBottomBar}>
         <TouchableOpacity 
           style={styles.fixedShareBtn}
-          onPress={() => Alert.alert("공유하기", "AI 검토 리포트 링크가 복사되었습니다.")}
+          onPress={() => Alert.alert("공유하기", "진단 리포트 링크가 복사되었습니다.")}
         >
-          <Text style={styles.fixedShareIcon}>📤</Text>
+          <Share2 size={18} color={COLORS.primary} strokeWidth={1.75} />
           <Text style={styles.fixedShareText}>공유</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
           style={styles.fixedPdfBtn}
-          onPress={() => Alert.alert("PDF 다운로드", "소유자 제출용 검토 리포트 PDF가 저장되었습니다.")}
+          onPress={() => Alert.alert("PDF 다운로드", "소유자 제출용 진단 리포트 PDF가 저장되었습니다.")}
         >
-          <Text style={styles.fixedPdfIcon}>💾</Text>
+          <Download size={18} color={COLORS.primary} strokeWidth={1.75} />
           <Text style={styles.fixedPdfText}>PDF</Text>
         </TouchableOpacity>
 
@@ -582,7 +611,8 @@ export const AiReviewScreen: React.FC = () => {
           onPress={() => startChatForSpace(activeReport.spaceId)}
           activeOpacity={0.85}
         >
-          <Text style={styles.fixedCtaMainText}>🤝 소유자에게 협의 요청하기</Text>
+          <Handshake size={18} color="#FFFFFF" strokeWidth={1.75} style={{ marginRight: 6 }} />
+          <Text style={styles.fixedCtaMainText}>소유자에게 협의 요청하기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -600,23 +630,22 @@ const styles = StyleSheet.create({
   },
   introBanner: {
     backgroundColor: COLORS.surface,
-    padding: 20,
-    borderRadius: 18,
+    padding: 18,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
   },
   bannerBadge: {
     alignSelf: "flex-start",
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 3,
     paddingHorizontal: 8,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusSm,
     marginBottom: 8,
   },
   bannerBadgeText: {
@@ -626,54 +655,61 @@ const styles = StyleSheet.create({
   },
   introTitle: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     lineHeight: 26,
     letterSpacing: -0.4,
     marginBottom: 8,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   introDesc: {
     fontSize: 13,
     color: COLORS.textSecondary,
     lineHeight: 19,
     marginBottom: 16,
+    fontFamily: TYPOGRAPHY.bodyFont,
   },
   newReviewBtn: {
     backgroundColor: COLORS.primary,
     paddingVertical: 14,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusMd,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   newReviewBtnText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   sectionHeader: {
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   savedReportCard: {
     flexDirection: "row",
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     alignItems: "center",
   },
   reportThumbWrapper: {
     width: 90,
     height: 85,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     overflow: "hidden",
     position: "relative",
     marginRight: 12,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   reportThumb: {
     width: "100%",
@@ -686,12 +722,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    borderRadius: 4,
+    borderRadius: METRICS.borderRadiusSm,
   },
   scoreBadgeText: {
     color: "#FFFFFF",
     fontSize: 10,
     fontWeight: "800",
+    fontVariant: ["tabular-nums"],
   },
   reportCardInfo: {
     flex: 1,
@@ -704,30 +741,33 @@ const styles = StyleSheet.create({
   },
   reportDateText: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
+    fontVariant: ["tabular-nums"],
   },
   reportCardTitle: {
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 2,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   reportBizCandidate: {
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "600",
     marginBottom: 2,
   },
   reportRepairBrief: {
     fontSize: 11,
     color: COLORS.textSecondary,
+    fontVariant: ["tabular-nums"],
   },
   progressBarContainer: {
     backgroundColor: COLORS.surface,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
+    borderBottomColor: COLORS.line,
   },
   stepIndicatorRow: {
     flexDirection: "row",
@@ -737,60 +777,56 @@ const styles = StyleSheet.create({
   },
   stepText: {
     fontSize: 12,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     fontWeight: "600",
   },
   stepTextActive: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.accent,
+    fontWeight: "700",
   },
   stepArrow: {
     fontSize: 12,
-    color: COLORS.textTertiary,
+    color: COLORS.line,
   },
   progressTrack: {
     height: 4,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: COLORS.line,
     borderRadius: 2,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
   },
   stepSection: {
     paddingVertical: 10,
   },
   stepHeading: {
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   stepSub: {
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.textSecondary,
     marginBottom: 16,
-    lineHeight: 17,
+    lineHeight: 18,
   },
   uploadBox: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: "#CBD5E1",
-    borderStyle: "dashed",
+    backgroundColor: COLORS.surface,
+    borderRadius: METRICS.borderRadiusMd,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     padding: 16,
     alignItems: "center",
     marginBottom: 16,
   },
   uploadBoxActive: {
-    backgroundColor: COLORS.primaryLight,
-    borderColor: COLORS.primary,
-    borderStyle: "solid",
-  },
-  uploadIcon: {
-    fontSize: 28,
-    marginBottom: 6,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
   },
   uploadTitle: {
     fontSize: 14,
@@ -798,36 +834,40 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   uploadSub: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.textSecondary,
     marginTop: 2,
+    textAlign: "center",
   },
   selectListTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 10,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   spaceChoiceCard: {
     flexDirection: "row",
     backgroundColor: COLORS.surface,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     alignItems: "center",
   },
   spaceChoiceCardSelected: {
-    borderColor: COLORS.primary,
-    borderWidth: 2,
-    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
   },
   spaceChoiceThumb: {
     width: 65,
     height: 65,
-    borderRadius: 8,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 10,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   spaceChoiceInfo: {
     flex: 1,
@@ -836,16 +876,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   spaceChoiceMeta: {
     fontSize: 11,
     color: COLORS.textSecondary,
     marginTop: 2,
+    fontVariant: ["tabular-nums"],
   },
   spaceChoiceGrade: {
-    fontSize: 10,
+    fontSize: 11,
     color: COLORS.primary,
-    fontWeight: "700",
+    fontWeight: "600",
     marginTop: 2,
   },
   checkCircle: {
@@ -853,18 +895,13 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 1.5,
-    borderColor: "#D1D5DB",
+    borderColor: COLORS.line,
     alignItems: "center",
     justifyContent: "center",
   },
   checkCircleSelected: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-  checkText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "800",
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   bizGrid: {
     gap: 10,
@@ -874,32 +911,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.surface,
     padding: 14,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   bizChoiceCardSelected: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
   },
   bizRadio: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#D1D5DB",
+    borderWidth: 1.5,
+    borderColor: COLORS.line,
     marginRight: 12,
     alignItems: "center",
     justifyContent: "center",
   },
   bizRadioSelected: {
-    borderColor: COLORS.primary,
+    borderColor: COLORS.accent,
   },
   bizRadioDot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
   },
   bizText: {
     fontSize: 13,
@@ -907,8 +945,8 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   bizTextSelected: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   budgetList: {
     gap: 10,
@@ -919,22 +957,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.surface,
     padding: 14,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   budgetCardSelected: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
   },
   budgetText: {
     fontSize: 13,
     fontWeight: "600",
     color: COLORS.textPrimary,
+    fontVariant: ["tabular-nums"],
   },
   budgetTextSelected: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   stepBottomBar: {
     position: "absolute",
@@ -944,7 +984,7 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: "#EEEEEE",
+    borderTopColor: COLORS.line,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -953,6 +993,8 @@ const styles = StyleSheet.create({
   stepPrevBtn: {
     paddingVertical: 10,
     paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
   },
   stepPrevBtnText: {
     fontSize: 13,
@@ -963,12 +1005,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingVertical: 12,
     paddingHorizontal: 22,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusMd,
+    flexDirection: "row",
+    alignItems: "center",
   },
   stepNextBtnText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   loadingContainer: {
     flex: 1,
@@ -978,31 +1022,31 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   loadingIconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: COLORS.primaryLight,
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 20,
   },
-  loadingIcon: {
-    fontSize: 36,
-  },
   loadingTitle: {
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 24,
     textAlign: "center",
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   loadingListBox: {
     width: "100%",
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
     padding: 16,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
     marginBottom: 20,
   },
   loadingTextRow: {
@@ -1011,12 +1055,11 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   loadingStatusIcon: {
-    fontSize: 14,
     marginRight: 8,
   },
   loadingStatusText: {
     fontSize: 12,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
   },
   loadingStatusTextCurrent: {
     color: COLORS.primary,
@@ -1026,23 +1069,18 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
   loadingNotice: {
-    fontSize: 11,
-    color: COLORS.textTertiary,
+    fontSize: 12,
+    color: COLORS.textSecondary,
     textAlign: "center",
-    lineHeight: 16,
+    lineHeight: 18,
   },
   summaryCard: {
     backgroundColor: COLORS.surface,
-    borderRadius: 18,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 18,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
   },
   summaryTopRow: {
     flexDirection: "row",
@@ -1052,26 +1090,28 @@ const styles = StyleSheet.create({
   },
   summaryDate: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginBottom: 3,
+    fontVariant: ["tabular-nums"],
   },
   summaryTitle: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     maxWidth: 220,
     marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   summaryBiz: {
     fontSize: 12,
-    color: COLORS.primary,
-    fontWeight: "700",
+    color: COLORS.accent,
+    fontWeight: "600",
   },
   scoreBubble: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: COLORS.primaryLight,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.background,
     borderWidth: 2,
     borderColor: COLORS.primary,
     alignItems: "center",
@@ -1079,20 +1119,23 @@ const styles = StyleSheet.create({
   },
   scoreNum: {
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: "800",
     color: COLORS.primary,
+    fontVariant: ["tabular-nums"],
   },
   scoreLabel: {
     fontSize: 9,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.textSecondary,
     marginTop: -2,
   },
   verdictContainer: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 12,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     marginTop: 6,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   verdictMainText: {
     fontSize: 12,
@@ -1101,38 +1144,51 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 17,
   },
+  summaryDisclaimer: {
+    fontSize: 11,
+    color: COLORS.textSecondary,
+    marginTop: 8,
+  },
   reportSection: {
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   sectionHeaderTitle: {
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 12,
+    fontFamily: TYPOGRAPHY.titleFont,
+  },
+  subHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 14,
+    marginBottom: 8,
   },
   subHeaderTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
-    marginTop: 14,
-    marginBottom: 8,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   diagnosisBox: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 12,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 12,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   diagRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEF2F6",
+    borderBottomColor: COLORS.line,
   },
   diagLabel: {
     fontSize: 12,
@@ -1153,20 +1209,21 @@ const styles = StyleSheet.create({
   diagLabelHighlight: {
     fontSize: 13,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.textPrimary,
   },
   diagValueHighlight: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "800",
-    color: COLORS.primary,
+    color: COLORS.accent,
+    fontVariant: ["tabular-nums"],
   },
   hiddenCostItem: {
-    backgroundColor: "#FFFBEB",
-    borderRadius: 10,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: "#FDE68A",
+    borderColor: COLORS.line,
   },
   hiddenCostTop: {
     flexDirection: "row",
@@ -1177,41 +1234,46 @@ const styles = StyleSheet.create({
   hiddenCostName: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#92400E",
+    color: COLORS.textPrimary,
   },
   hiddenCostDesc: {
     fontSize: 11,
-    color: "#78350F",
+    color: COLORS.textSecondary,
     lineHeight: 16,
   },
   metricGrid: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 14,
+    gap: 8,
   },
   metricCard: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
-    marginHorizontal: 3,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   metricVal: {
     fontSize: 14,
     fontWeight: "800",
     color: COLORS.textPrimary,
+    fontVariant: ["tabular-nums"],
   },
   metricLab: {
-    fontSize: 10,
-    color: COLORS.textTertiary,
+    fontSize: 11,
+    color: COLORS.textSecondary,
     marginTop: 2,
   },
   bepBarBox: {
-    backgroundColor: "#F1F5F9",
-    borderRadius: 12,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 12,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   bepTitle: {
     fontSize: 11,
@@ -1221,8 +1283,8 @@ const styles = StyleSheet.create({
   },
   bepTrack: {
     height: 18,
-    backgroundColor: "#CBD5E1",
-    borderRadius: 9,
+    backgroundColor: COLORS.line,
+    borderRadius: METRICS.borderRadiusSm,
     overflow: "hidden",
   },
   bepFill: {
@@ -1233,8 +1295,9 @@ const styles = StyleSheet.create({
   },
   bepFillText: {
     color: "#FFFFFF",
-    fontSize: 9,
-    fontWeight: "800",
+    fontSize: 10,
+    fontWeight: "700",
+    fontVariant: ["tabular-nums"],
   },
   bepLabelRow: {
     flexDirection: "row",
@@ -1243,28 +1306,31 @@ const styles = StyleSheet.create({
   },
   bepSubText: {
     fontSize: 10,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
+    fontVariant: ["tabular-nums"],
   },
   warningBox: {
-    backgroundColor: "#FEF2F2",
-    borderRadius: 8,
+    backgroundColor: COLORS.surface,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#FECACA",
+    borderColor: COLORS.riskDanger,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.riskDanger,
     marginTop: 6,
   },
   warningBoxText: {
     fontSize: 11,
-    color: "#991B1B",
+    color: COLORS.riskDanger,
     lineHeight: 16,
   },
   recCard: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 12,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#EEF2F6",
+    borderColor: COLORS.line,
   },
   recCardTop: {
     flexDirection: "row",
@@ -1272,27 +1338,29 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   recRankBadge: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.primary,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    borderRadius: 4,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 6,
   },
   recRankText: {
     fontSize: 10,
-    fontWeight: "800",
-    color: COLORS.primary,
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
   recTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
     flex: 1,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   recScore: {
     fontSize: 13,
     fontWeight: "800",
-    color: COLORS.primary,
+    color: COLORS.accent,
+    fontVariant: ["tabular-nums"],
   },
   recResource: {
     fontSize: 11,
@@ -1301,7 +1369,7 @@ const styles = StyleSheet.create({
   },
   recReason: {
     fontSize: 11,
-    color: "#475569",
+    color: COLORS.textSecondary,
     lineHeight: 16,
   },
   actionButtonGroup: {
@@ -1309,26 +1377,32 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   connectSupportBtn: {
-    backgroundColor: COLORS.primaryLight,
-    paddingVertical: 12,
-    borderRadius: 10,
+    backgroundColor: COLORS.surface,
+    paddingVertical: 13,
+    borderRadius: METRICS.borderRadiusMd,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#D6DCFF",
+    borderColor: COLORS.accent,
   },
   connectSupportText: {
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontSize: 13,
     fontWeight: "700",
   },
   consultBtn: {
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 12,
-    borderRadius: 10,
+    backgroundColor: COLORS.surface,
+    paddingVertical: 13,
+    borderRadius: METRICS.borderRadiusMd,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   consultText: {
-    color: COLORS.textSecondary,
+    color: COLORS.primary,
     fontSize: 13,
     fontWeight: "700",
   },
@@ -1340,16 +1414,11 @@ const styles = StyleSheet.create({
     height: 74,
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: "#EEEEEE",
+    borderTopColor: COLORS.line,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingBottom: Platform.OS === "ios" ? 14 : 6,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 8,
   },
   fixedShareBtn: {
     width: 44,
@@ -1357,13 +1426,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 6,
   },
-  fixedShareIcon: {
-    fontSize: 18,
-  },
   fixedShareText: {
     fontSize: 10,
     color: COLORS.textSecondary,
     fontWeight: "600",
+    marginTop: 2,
   },
   fixedPdfBtn: {
     width: 44,
@@ -1371,25 +1438,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: 10,
   },
-  fixedPdfIcon: {
-    fontSize: 18,
-  },
   fixedPdfText: {
     fontSize: 10,
     color: COLORS.textSecondary,
     fontWeight: "600",
+    marginTop: 2,
   },
   fixedCtaMain: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     paddingVertical: 13,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusMd,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
   fixedCtaMainText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
   },
 });

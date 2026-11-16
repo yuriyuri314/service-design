@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { StartupStory } from "../../types";
 
 interface StoryCardProps {
@@ -32,13 +32,15 @@ export const StoryCard: React.FC<StoryCardProps> = ({ story, onPress }) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: 260,
+    width: 250,
     height: 180,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     overflow: "hidden",
-    marginRight: 14,
-    backgroundColor: "#1F2937",
+    marginRight: 12,
+    backgroundColor: COLORS.primary,
     position: "relative",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   image: {
     width: "100%",
@@ -50,44 +52,47 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.45)",
+    backgroundColor: "rgba(42, 42, 40, 0.55)",
   },
   content: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 14,
+    padding: 12,
   },
   badge: {
     alignSelf: "flex-start",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    borderRadius: 4,
-    marginBottom: 6,
+    borderRadius: METRICS.borderRadiusSm,
+    marginBottom: 5,
   },
   badgeText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 10,
-    color: "#FFFFFF",
+    color: COLORS.surface,
     fontWeight: "700",
   },
   businessName: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#FFFFFF",
+    fontFamily: TYPOGRAPHY.titleFont,
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.surface,
     letterSpacing: -0.2,
   },
   founderText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
-    color: "#D1D5DB",
+    color: COLORS.line,
     marginTop: 2,
     marginBottom: 4,
   },
   quoteText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
-    color: "#F3F4F6",
-    fontStyle: "italic",
-    lineHeight: 15,
+    color: COLORS.surface,
+    lineHeight: 16,
   },
 });

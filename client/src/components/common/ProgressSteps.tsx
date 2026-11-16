@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, ViewStyle } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { Check } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 
 interface ProgressStepsProps {
   currentStep: number; // 1 ~ 5
@@ -10,7 +11,7 @@ interface ProgressStepsProps {
 
 const STEPS = [
   { step: 1, label: "공간 찾기" },
-  { step: 2, label: "AI 검토" },
+  { step: 2, label: "계약 전 진단" },
   { step: 3, label: "소유자 협의" },
   { step: 4, label: "지원 신청" },
   { step: 5, label: "창업" },
@@ -38,14 +39,18 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({
                     isCurrent && styles.circleCurrent,
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.circleText,
-                      (isDone || isCurrent) && styles.circleTextActive,
-                    ]}
-                  >
-                    {isDone ? "✓" : item.step}
-                  </Text>
+                  {isDone ? (
+                    <Check size={12} color={COLORS.surface} strokeWidth={2.2} />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.circleText,
+                        isCurrent && styles.circleTextCurrent,
+                      ]}
+                    >
+                      {item.step}
+                    </Text>
+                  )}
                 </View>
                 {!compact && (
                   <Text
@@ -100,36 +105,37 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   circle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#E5E7EB",
+    width: 22,
+    height: 22,
+    borderRadius: METRICS.borderRadiusFull,
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     alignItems: "center",
     justifyContent: "center",
   },
   circleDone: {
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   circleCurrent: {
-    backgroundColor: COLORS.primary,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.35,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   circleText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "700",
     color: COLORS.textSecondary,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
-  circleTextActive: {
-    color: "#FFFFFF",
+  circleTextCurrent: {
+    color: COLORS.surface,
   },
   line: {
     flex: 1,
-    height: 2,
-    backgroundColor: "#E5E7EB",
+    height: 1,
+    backgroundColor: COLORS.line,
     marginHorizontal: 4,
     marginBottom: 16,
   },
@@ -140,17 +146,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   stepLabel: {
-    fontSize: 10,
-    color: COLORS.textTertiary,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 11,
+    color: COLORS.textSecondary,
     marginTop: 4,
     fontWeight: "500",
   },
   stepLabelCurrent: {
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "700",
   },
   stepLabelDone: {
-    color: COLORS.textSecondary,
+    color: COLORS.textPrimary,
   },
   compactLabelRow: {
     flexDirection: "row",
@@ -159,15 +166,18 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   compactCurrentText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     color: COLORS.textSecondary,
   },
   compactStepHighlight: {
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "700",
   },
   compactStepCount: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
 });

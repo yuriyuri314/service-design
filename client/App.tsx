@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   StyleSheet, 
   View, 
@@ -6,11 +6,16 @@ import {
   SafeAreaView, 
   StatusBar, 
   Platform, 
-  TouchableOpacity, 
-  Dimensions 
+  TouchableOpacity 
 } from "react-native";
+import { 
+  useFonts, 
+  NotoSerifKR_600SemiBold, 
+  NotoSerifKR_700Bold 
+} from "@expo-google-fonts/noto-serif-kr";
+import { Smartphone, Monitor } from "lucide-react-native";
 import { AppProvider, useApp } from "./src/context/AppContext";
-import { COLORS, METRICS, APP_NAME } from "./src/constants/theme";
+import { COLORS, METRICS, APP_NAME, TYPOGRAPHY } from "./src/constants/theme";
 import { BottomTabBar } from "./src/components/navigation/BottomTabBar";
 import { OnboardingScreen } from "./src/screens/OnboardingScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
@@ -57,6 +62,31 @@ export default function App() {
   const isWeb = Platform.OS === "web";
   const [deviceFrameMode, setDeviceFrameMode] = useState<boolean>(true);
 
+  // Load Noto Serif KR font
+  const [fontsLoaded] = useFonts({
+    NotoSerifKR_600SemiBold,
+    NotoSerifKR_700Bold,
+  });
+
+  // Inject web font styling for reliable Pretendard & Noto Serif KR rendering
+  useEffect(() => {
+    if (isWeb && typeof document !== "undefined") {
+      if (!document.getElementById("taebaek-typography")) {
+        const style = document.createElement("style");
+        style.id = "taebaek-typography";
+        style.textContent = `
+          @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+          @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&display=swap');
+          * {
+            font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            box-sizing: border-box;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, [isWeb]);
+
   return (
     <AppProvider>
       <SafeAreaView style={styles.outerContainer}>
@@ -67,7 +97,7 @@ export default function App() {
             <View style={styles.webTopBarLeft}>
               <View style={styles.brandDot} />
               <Text style={styles.webTitle}>
-                {APP_NAME} <Text style={styles.webBadge}>모바일 앱 프로토타입</Text>
+                {APP_NAME} <Text style={styles.webBadge}>태백 유휴공간 기록물</Text>
               </Text>
             </View>
             <View style={styles.webTopBarRight}>
@@ -76,8 +106,13 @@ export default function App() {
                 onPress={() => setDeviceFrameMode(prev => !prev)}
                 activeOpacity={0.8}
               >
+                {deviceFrameMode ? (
+                  <Smartphone size={14} color={COLORS.surface} strokeWidth={1.75} style={{ marginRight: 5 }} />
+                ) : (
+                  <Monitor size={14} color={COLORS.surface} strokeWidth={1.75} style={{ marginRight: 5 }} />
+                )}
                 <Text style={styles.frameToggleText}>
-                  {deviceFrameMode ? "📱 모바일 프레임 모드 (390×844)" : "🖥️ 반응형 전체화면"}
+                  {deviceFrameMode ? "모바일 프레임 (390×844)" : "반응형 전체화면"}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -91,7 +126,6 @@ export default function App() {
               isWeb && deviceFrameMode && styles.deviceFrame,
             ]}
           >
-            {/* iPhone 다이내믹 아일랜드 & 노치 시뮬레이션 */}
             {isWeb && deviceFrameMode && (
               <View style={styles.dynamicIslandWrapper}>
                 <View style={styles.dynamicIsland} />
@@ -109,16 +143,18 @@ export default function App() {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: "#F1F5F9",
+    backgroundColor: COLORS.background,
   },
   webTopBar: {
     height: 44,
-    backgroundColor: "#1E293B",
+    backgroundColor: COLORS.primary,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
     zIndex: 999,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.line,
   },
   webTopBarLeft: {
     flexDirection: "row",
@@ -128,18 +164,20 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     marginRight: 8,
   },
   webTitle: {
-    color: "#FFFFFF",
+    color: COLORS.surface,
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: "700",
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   webBadge: {
-    color: "#94A3B8",
+    color: COLORS.line,
     fontSize: 11,
     fontWeight: "400",
+    fontFamily: TYPOGRAPHY.bodyFont,
   },
   webTopBarRight: {
     flexDirection: "row",
@@ -147,12 +185,16 @@ const styles = StyleSheet.create({
   },
   frameToggleBtn: {
     backgroundColor: "rgba(255, 255, 255, 0.12)",
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   frameToggleText: {
-    color: "#E2E8F0",
+    color: COLORS.surface,
     fontSize: 11,
     fontWeight: "600",
   },
@@ -173,14 +215,9 @@ const styles = StyleSheet.create({
   deviceFrame: {
     width: METRICS.standardWidth,
     height: METRICS.standardHeight,
-    borderRadius: 44,
-    borderWidth: 10,
-    borderColor: "#0F172A",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.25,
-    shadowRadius: 28,
-    elevation: 20,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: COLORS.line,
     position: "relative",
   },
   dynamicIslandWrapper: {
@@ -190,12 +227,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: COLORS.surface,
     zIndex: 9999,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.line,
   },
   dynamicIsland: {
     width: 96,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: "#0F172A",
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: COLORS.primary,
   },
   screenContainer: {
     flex: 1,

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, ViewStyle } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { RiskLevel } from "../../types";
 
 interface RiskBadgeProps {
@@ -21,41 +22,38 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
       case "SAFE":
         return {
           color: COLORS.riskSafe,
-          bgColor: "#ECFDF5",
           defaultLabel: "안전",
-          dotColor: "#10B981"
+          Icon: CheckCircle2,
         };
       case "CAUTION":
         return {
           color: COLORS.riskCaution,
-          bgColor: "#FFFBEB",
           defaultLabel: "주의",
-          dotColor: "#F59E0B"
+          Icon: AlertTriangle,
         };
       case "DANGER":
         return {
           color: COLORS.riskDanger,
-          bgColor: "#FEF2F2",
           defaultLabel: "위험",
-          dotColor: "#EF4444"
+          Icon: AlertCircle,
         };
       default:
         return {
           color: COLORS.textSecondary,
-          bgColor: "#F3F4F6",
-          defaultLabel: "미정",
-          dotColor: COLORS.textSecondary
+          defaultLabel: "점검 필요",
+          Icon: AlertCircle,
         };
     }
   };
 
   const config = getBadgeConfig();
   const displayLabel = label || config.defaultLabel;
+  const IconComponent = config.Icon;
 
   const sizeStyles = {
-    sm: { paddingVertical: 2, paddingHorizontal: 6, fontSize: 10, dotSize: 5 },
-    md: { paddingVertical: 4, paddingHorizontal: 9, fontSize: 11, dotSize: 6 },
-    lg: { paddingVertical: 6, paddingHorizontal: 12, fontSize: 13, dotSize: 8 },
+    sm: { paddingVertical: 2, paddingHorizontal: 6, fontSize: 11, iconSize: 12 },
+    md: { paddingVertical: 3, paddingHorizontal: 8, fontSize: 12, iconSize: 14 },
+    lg: { paddingVertical: 5, paddingHorizontal: 10, fontSize: 13, iconSize: 16 },
   }[size];
 
   return (
@@ -63,26 +61,28 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: config.bgColor,
-          borderColor: config.color,
           paddingVertical: sizeStyles.paddingVertical,
           paddingHorizontal: sizeStyles.paddingHorizontal,
+          borderColor: config.color,
         },
         style,
       ]}
     >
-      <View
+      <IconComponent 
+        size={sizeStyles.iconSize} 
+        color={config.color} 
+        strokeWidth={1.75} 
+        style={styles.icon}
+      />
+      <Text
         style={[
-          styles.dot,
+          styles.text,
           {
-            backgroundColor: config.dotColor,
-            width: sizeStyles.dotSize,
-            height: sizeStyles.dotSize,
-            borderRadius: sizeStyles.dotSize / 2,
+            color: config.color,
+            fontSize: sizeStyles.fontSize,
           },
         ]}
-      />
-      <Text style={[styles.text, { color: config.color, fontSize: sizeStyles.fontSize }]}>
+      >
         {displayLabel}
       </Text>
     </View>
@@ -93,14 +93,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 9999,
+    backgroundColor: COLORS.surface,
     borderWidth: 1,
+    borderRadius: METRICS.borderRadiusSm,
     alignSelf: "flex-start",
   },
-  dot: {
-    marginRight: 5,
+  icon: {
+    marginRight: 4,
   },
   text: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontWeight: "700",
     letterSpacing: -0.2,
   },

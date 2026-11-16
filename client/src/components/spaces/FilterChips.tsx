@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { useApp } from "../../context/AppContext";
 import { SpaceType, SpaceCondition } from "../../types";
 
@@ -11,7 +11,7 @@ const SPACE_TYPES: { key: SpaceType; label: string }[] = [
   { key: "VACANT_HOUSE", label: "빈집" },
   { key: "VACANT_STORE", label: "빈 상가" },
   { key: "WAREHOUSE_FACTORY", label: "창고·공장" },
-  { key: "CLOSED_SCHOOL", label: "폐교·공공시설" },
+  { key: "CLOSED_SCHOOL", label: "폐교·공공" },
 ];
 
 const CONDITIONS: { key: SpaceCondition | "ALL"; label: string }[] = [
@@ -98,15 +98,10 @@ export const FilterChips: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.96)",
+    backgroundColor: COLORS.surface,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 3,
+    borderBottomColor: COLORS.line,
     zIndex: 20,
   },
   scrollContent: {
@@ -117,58 +112,62 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   filterCategoryLabel: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "700",
     color: COLORS.textSecondary,
     marginRight: 6,
   },
   chip: {
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+    backgroundColor: COLORS.background,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 6,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   chipActive: {
     backgroundColor: COLORS.primary,
     borderColor: COLORS.primary,
   },
   chipText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "600",
     color: COLORS.textPrimary,
   },
   chipTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.surface,
+    fontWeight: "700",
   },
   subChip: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     paddingVertical: 4,
-    paddingHorizontal: 9,
-    borderRadius: 6,
+    paddingHorizontal: 8,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 6,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.line,
   },
   subChipActive: {
-    backgroundColor: COLORS.primaryLight,
-    borderColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   subChipText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "500",
-    color: "#4B5563",
+    color: COLORS.textSecondary,
   },
   subChipTextActive: {
-    color: COLORS.primary,
+    color: COLORS.surface,
     fontWeight: "700",
   },
   divider: {
     width: 1,
     height: 14,
-    backgroundColor: "#D1D5DB",
+    backgroundColor: COLORS.line,
     marginHorizontal: 8,
   },
 });

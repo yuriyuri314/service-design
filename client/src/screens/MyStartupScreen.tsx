@@ -6,10 +6,21 @@ import {
   ScrollView, 
   TouchableOpacity, 
   TextInput, 
-  Alert,
-  Platform 
+  Alert 
 } from "react-native";
-import { COLORS } from "../constants/theme";
+import { 
+  FileText, 
+  Download, 
+  Building2, 
+  ChevronLeft, 
+  ChevronRight, 
+  Check, 
+  Heart, 
+  Settings, 
+  SlidersHorizontal,
+  Bookmark
+} from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/common/Header";
 import { ProgressSteps } from "../components/common/ProgressSteps";
@@ -34,12 +45,12 @@ export const MyStartupScreen: React.FC = () => {
 
   const [activeSubTab, setActiveSubTab] = useState<SubTab>("PROPOSAL");
 
-  // AI 지원사업 매칭 필터 조건
+  // 맞춤 지원사업 매칭 필터 조건
   const [targetAge, setTargetAge] = useState("만 29세 (청년)");
   const [spaceSecuredStatus, setSpaceSecuredStatus] = useState("소유자 협의 완료 (가계약 단계)");
   const [selectedProgramId, setSelectedProgramId] = useState<string>("prog-01");
 
-  // AI 사업계획서 템플릿 상태 (AI 검토 리포트 내용 연동)
+  // 사업계획서 템플릿 상태 (진단 리포트 내용 연동)
   const currentReport = reports[0];
   const [bizTitle, setBizTitle] = useState("철암 탄광역사거리 로컬 수제맥주 브루펍 '검은돌'");
   const [proposalSection1, setProposalSection1] = useState(
@@ -58,13 +69,13 @@ export const MyStartupScreen: React.FC = () => {
     {
       step: 1,
       title: "공간 발굴 및 현장 확인",
-      desc: "태백시 내 빈집·빈상가 데이터 조회 및 현장 실측 (현재 완료 ✓)",
+      desc: "태백시 내 빈집·빈상가 데이터 조회 및 현장 실측 (현재 완료)",
       status: "DONE",
     },
     {
       step: 2,
-      title: "AI 창업 검토 리포트 발행",
-      desc: "골조 진단, 숨은 수리비, 손익분기점 객관적 데이터 확보 (현재 완료 ✓)",
+      title: "계약 전 진단 리포트 발행",
+      desc: "골조 진단, 숨은 수리비, 손익분기점 객관적 데이터 확보 (현재 완료)",
       status: "DONE",
     },
     {
@@ -76,7 +87,7 @@ export const MyStartupScreen: React.FC = () => {
     {
       step: 4,
       title: "태백시 청년창업 공간개선사업 신청",
-      desc: "AI 사업계획서 접수로 리모델링 보조금(최대 4,500만원) 확보",
+      desc: "사업계획서 초안 접수로 리모델링 보조금(최대 4,500만원) 확보",
       status: "TODO",
     },
     {
@@ -96,20 +107,20 @@ export const MyStartupScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="내 창업 (신청 + 마이)" />
+      <Header title="내 창업 (신청·기록)" />
 
       <ScrollView style={styles.scrollBody} showsVerticalScrollIndicator={false}>
         {/* 상단 5단계 여정 진행 카드 */}
         <View style={styles.journeyCard}>
           <View style={styles.journeyHeader}>
             <View>
-              <Text style={styles.journeySub}>나의 태백 청년 창업 여정</Text>
+              <Text style={styles.journeySub}>태백 청년 창업 여정</Text>
               <Text style={styles.journeyTitle}>
                 {startupStep === 1 && "1단계: 유휴공간 탐색"}
-                {startupStep === 2 && "2단계: AI 창업 검토"}
+                {startupStep === 2 && "2단계: 계약 전 진단"}
                 {startupStep === 3 && "3단계: 소유자 조건 협의"}
                 {startupStep === 4 && "4단계: 지원사업 신청"}
-                {startupStep === 5 && "5단계: 창업 성공!"}
+                {startupStep === 5 && "5단계: 창업 완료"}
               </Text>
             </View>
             <View style={styles.stepBadge}>
@@ -125,7 +136,8 @@ export const MyStartupScreen: React.FC = () => {
               onPress={() => setStartupStep(Math.max(1, startupStep - 1))}
               disabled={startupStep === 1}
             >
-              <Text style={styles.stepNavBtnText}>◀ 이전 단계</Text>
+              <ChevronLeft size={14} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginRight: 2 }} />
+              <Text style={styles.stepNavBtnText}>이전 단계</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
@@ -133,7 +145,8 @@ export const MyStartupScreen: React.FC = () => {
               onPress={() => setStartupStep(Math.min(5, startupStep + 1))}
               disabled={startupStep === 5}
             >
-              <Text style={styles.stepNavBtnTextPrimary}>다음 단계 완료 ▶</Text>
+              <Text style={styles.stepNavBtnTextPrimary}>다음 단계 완료</Text>
+              <ChevronRight size={14} color={COLORS.surface} strokeWidth={1.75} style={{ marginLeft: 2 }} />
             </TouchableOpacity>
           </View>
         </View>
@@ -145,7 +158,7 @@ export const MyStartupScreen: React.FC = () => {
             onPress={() => setActiveSubTab("PROPOSAL")}
           >
             <Text style={[styles.subTabText, activeSubTab === "PROPOSAL" && styles.subTabTextActive]}>
-              AI 사업계획서 ✨
+              사업계획서 초안
             </Text>
           </TouchableOpacity>
 
@@ -154,7 +167,7 @@ export const MyStartupScreen: React.FC = () => {
             onPress={() => setActiveSubTab("MATCHING")}
           >
             <Text style={[styles.subTabText, activeSubTab === "MATCHING" && styles.subTabTextActive]}>
-              지원사업 매칭
+              맞춤 지원사업
             </Text>
           </TouchableOpacity>
 
@@ -177,14 +190,13 @@ export const MyStartupScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* 1. AI 사업계획서 초안 탭 (핵심 연결 기능!) */}
+        {/* 1. 사업계획서 초안 탭 */}
         {activeSubTab === "PROPOSAL" && (
           <View style={styles.sectionWrap}>
             <HighlightBox
-              title="공간 확보와 지원사업 신청을 잇는 AI 사업계획서"
-              icon={<Text>📑</Text>}
+              title="공간 확보와 지원사업 신청을 잇는 사업계획서 초안"
             >
-              AI 검토 리포트에서 분석된 공간 수리비(1,450만원), 상권 유동인구, 추천 비즈니스 모델을 태백시 청년창업 공모 양식에 맞추어 자동 완성했습니다.
+              진단 리포트에서 분석된 공간 수리비(1,450만원), 상권 유동인구, 추천 비즈니스 모델을 태백시 청년창업 공모 양식에 맞추어 연동했습니다.
             </HighlightBox>
 
             <View style={styles.proposalDoc}>
@@ -193,7 +205,7 @@ export const MyStartupScreen: React.FC = () => {
                   <Text style={styles.docBadgeText}>2026 태백시 청년창업 지원사업 신청 표준 양식</Text>
                 </View>
                 <TouchableOpacity style={styles.docSaveBtn} onPress={handleSaveProposal}>
-                  <Text style={styles.docSaveBtnText}>💾 초안 저장</Text>
+                  <Text style={styles.docSaveBtnText}>초안 저장</Text>
                 </TouchableOpacity>
               </View>
 
@@ -231,7 +243,8 @@ export const MyStartupScreen: React.FC = () => {
 
               {proposalSaved && (
                 <View style={styles.savedAlert}>
-                  <Text style={styles.savedAlertText}>✓ AI 사업계획서가 성공적으로 저장되었습니다!</Text>
+                  <Check size={14} color={COLORS.riskSafe} strokeWidth={2} style={{ marginRight: 6 }} />
+                  <Text style={styles.savedAlertText}>사업계획서 초안이 저장되었습니다.</Text>
                 </View>
               )}
 
@@ -241,25 +254,30 @@ export const MyStartupScreen: React.FC = () => {
                   style={styles.downloadPdfBtn}
                   onPress={() => Alert.alert("다운로드 완료", "태백시 지원사업 공모 양식 PDF로 저장되었습니다.")}
                 >
-                  <Text style={styles.downloadPdfText}>📥 PDF 공모서류 받기</Text>
+                  <Download size={14} color={COLORS.textPrimary} strokeWidth={1.75} style={{ marginRight: 4 }} />
+                  <Text style={styles.downloadPdfText}>PDF 서류 받기</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                   style={styles.submitCenterBtn}
                   onPress={() => Alert.alert("접수 상담 신청", "태백시 청년창창센터 담당 매니저에게 사전 검토 서류가 전송되었습니다.")}
                 >
-                  <Text style={styles.submitCenterText}>🏛️ 청년창창센터 접수</Text>
+                  <Building2 size={14} color="#FFFFFF" strokeWidth={1.75} style={{ marginRight: 4 }} />
+                  <Text style={styles.submitCenterText}>청년창창센터 접수</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         )}
 
-        {/* 2. AI 지원사업 매칭 탭 */}
+        {/* 2. 나에게 맞는 지원사업 탭 */}
         {activeSubTab === "MATCHING" && (
           <View style={styles.sectionWrap}>
             <View style={styles.matchingFilterBox}>
-              <Text style={styles.matchingTitle}>🎯 나의 창업 조건 매칭</Text>
+              <View style={styles.filterTitleRow}>
+                <SlidersHorizontal size={15} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+                <Text style={styles.matchingTitle}>나의 창업 조건 매칭</Text>
+              </View>
               <View style={styles.filterChipRow}>
                 <View style={styles.filterTag}>
                   <Text style={styles.filterTagText}>연령: {targetAge}</Text>
@@ -278,7 +296,7 @@ export const MyStartupScreen: React.FC = () => {
               return (
                 <View key={prog.id} style={[styles.programCard, isSelected && styles.programCardSelected]}>
                   <View style={styles.progTop}>
-                    <View style={[styles.progDDayBadge, { backgroundColor: prog.badgeColor || COLORS.primary }]}>
+                    <View style={styles.progDDayBadge}>
                       <Text style={styles.progDDayText}>D-{prog.dDay}</Text>
                     </View>
                     <Text style={styles.progGrant}>{prog.grantAmount}</Text>
@@ -296,7 +314,8 @@ export const MyStartupScreen: React.FC = () => {
                       setActiveSubTab("PROPOSAL");
                     }}
                   >
-                    <Text style={styles.progApplyBtnText}>✨ 이 지원사업에 AI 계획서 적용하기 →</Text>
+                    <Text style={styles.progApplyBtnText}>이 지원사업에 계획서 적용하기</Text>
+                    <ChevronRight size={14} color={COLORS.accent} strokeWidth={1.75} />
                   </TouchableOpacity>
                 </View>
               );
@@ -307,7 +326,7 @@ export const MyStartupScreen: React.FC = () => {
         {/* 3. 창업 절차 타임라인 가이드 */}
         {activeSubTab === "TIMELINE" && (
           <View style={styles.sectionWrap}>
-            <Text style={styles.timelineHeading}>🗺️ 태백 청년 빈집 창업 5단계 로드맵</Text>
+            <Text style={styles.timelineHeading}>태백 청년 빈집 창업 5단계 로드맵</Text>
             <Text style={styles.timelineSub}>계약 전부터 지원금 수령까지 한눈에 확인하세요.</Text>
 
             <View style={styles.timelineList}>
@@ -319,12 +338,16 @@ export const MyStartupScreen: React.FC = () => {
                       item.status === "DONE" && styles.timelineCircleDone,
                       item.status === "IN_PROGRESS" && styles.timelineCircleProgress,
                     ]}>
-                      <Text style={[
-                        styles.timelineCircleText,
-                        (item.status === "DONE" || item.status === "IN_PROGRESS") && styles.timelineCircleTextActive,
-                      ]}>
-                        {item.status === "DONE" ? "✓" : item.step}
-                      </Text>
+                      {item.status === "DONE" ? (
+                        <Check size={12} color="#FFFFFF" strokeWidth={2} />
+                      ) : (
+                        <Text style={[
+                          styles.timelineCircleText,
+                          item.status === "IN_PROGRESS" && styles.timelineCircleTextActive,
+                        ]}>
+                          {item.step}
+                        </Text>
+                      )}
                     </View>
                     {idx < timelineSteps.length - 1 && <View style={styles.timelineLine} />}
                   </View>
@@ -354,10 +377,13 @@ export const MyStartupScreen: React.FC = () => {
         {/* 4. 보관함 (찜한 공간 & 리포트) */}
         {activeSubTab === "MY_ARCHIVE" && (
           <View style={styles.sectionWrap}>
-            <Text style={styles.archiveHeading}>❤️ 찜한 유휴공간 ({bookmarkedSpaces.length})</Text>
+            <View style={styles.archiveHeaderRow}>
+              <Heart size={16} color={COLORS.accent} strokeWidth={1.75} style={{ marginRight: 6 }} />
+              <Text style={styles.archiveHeading}>찜한 유휴공간 ({bookmarkedSpaces.length})</Text>
+            </View>
             {bookmarkedSpaces.length === 0 ? (
               <View style={styles.emptyCard}>
-                <Text style={styles.emptyEmoji}>🤍</Text>
+                <Bookmark size={24} color={COLORS.line} strokeWidth={1.75} style={{ marginBottom: 6 }} />
                 <Text style={styles.emptyNotice}>찜한 공간이 없습니다.</Text>
                 <TouchableOpacity onPress={() => setActiveTab("EXPLORE")}>
                   <Text style={styles.emptyActionText}>공간 찾기에서 둘러보기 →</Text>
@@ -376,15 +402,18 @@ export const MyStartupScreen: React.FC = () => {
                     style={styles.archiveActionBtn}
                     onPress={() => setActiveTab("AI_REVIEW")}
                   >
-                    <Text style={styles.archiveActionBtnText}>검토하기</Text>
+                    <Text style={styles.archiveActionBtnText}>진단하기</Text>
                   </TouchableOpacity>
                 </View>
               ))
             )}
 
-            <Text style={[styles.archiveHeading, { marginTop: 20 }]}>
-              📊 내가 만든 검토 리포트 ({reports.length})
-            </Text>
+            <View style={[styles.archiveHeaderRow, { marginTop: 20 }]}>
+              <FileText size={16} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+              <Text style={styles.archiveHeading}>
+                내가 만든 진단 리포트 ({reports.length})
+              </Text>
+            </View>
             {reports.map((rep) => (
               <TouchableOpacity
                 key={rep.id}
@@ -403,7 +432,10 @@ export const MyStartupScreen: React.FC = () => {
 
         {/* 하단 환경 설정 및 소유자 모드 전환 */}
         <View style={styles.settingsBox}>
-          <Text style={styles.settingsTitle}>⚙️ 설정 및 모드 변경</Text>
+          <View style={styles.settingsTitleRow}>
+            <Settings size={15} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+            <Text style={styles.settingsTitle}>설정 및 모드 변경</Text>
+          </View>
           
           <TouchableOpacity 
             style={styles.settingItem}
@@ -413,7 +445,7 @@ export const MyStartupScreen: React.FC = () => {
               <Text style={styles.settingItemTitle}>공간 소유자 모드로 전환</Text>
               <Text style={styles.settingItemSub}>빈집·빈상가를 소유하고 계신가요?</Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <ChevronRight size={16} color={COLORS.textSecondary} strokeWidth={1.75} />
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -422,9 +454,9 @@ export const MyStartupScreen: React.FC = () => {
           >
             <View>
               <Text style={styles.settingItemTitle}>온보딩 다시 보기</Text>
-              <Text style={styles.settingItemSub}>판단, 연결, 신청 슬라이드 확인</Text>
+              <Text style={styles.settingItemSub}>판단, 연결, 신청 안내 다시 확인</Text>
             </View>
-            <Text style={styles.settingArrow}>→</Text>
+            <ChevronRight size={16} color={COLORS.textSecondary} strokeWidth={1.75} />
           </TouchableOpacity>
         </View>
 
@@ -446,15 +478,10 @@ const styles = StyleSheet.create({
   journeyCard: {
     backgroundColor: COLORS.surface,
     padding: 18,
-    borderRadius: 18,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
   },
   journeyHeader: {
     flexDirection: "row",
@@ -464,60 +491,71 @@ const styles = StyleSheet.create({
   },
   journeySub: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     fontWeight: "600",
   },
   journeyTitle: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginTop: 2,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   stepBadge: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 3,
     paddingHorizontal: 8,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusSm,
   },
   stepBadgeText: {
     fontSize: 11,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary,
+    fontVariant: ["tabular-nums"],
   },
   stepNavRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: COLORS.line,
     paddingTop: 10,
   },
   stepNavBtn: {
-    paddingVertical: 6,
+    paddingVertical: 7,
     paddingHorizontal: 12,
-    backgroundColor: "#F3F4F6",
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    flexDirection: "row",
+    alignItems: "center",
   },
   stepNavBtnPrimary: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   stepNavBtnDisabled: {
     opacity: 0.4,
   },
   stepNavBtnText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     color: COLORS.textSecondary,
   },
   stepNavBtnTextPrimary: {
     fontSize: 12,
-    fontWeight: "800",
-    color: COLORS.primary,
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
   subTabBar: {
     flexDirection: "row",
-    backgroundColor: "#E5E7EB",
-    borderRadius: 12,
+    backgroundColor: COLORS.surface,
+    borderRadius: METRICS.borderRadiusSm,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     padding: 3,
     marginBottom: 16,
   },
@@ -525,14 +563,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 8,
     alignItems: "center",
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
   },
   subTabItemActive: {
-    backgroundColor: "#FFFFFF",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    backgroundColor: COLORS.primary,
   },
   subTabText: {
     fontSize: 11,
@@ -540,8 +574,8 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
   subTabTextActive: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: "#FFFFFF",
+    fontWeight: "700",
   },
   sectionWrap: {
     marginBottom: 16,
@@ -549,9 +583,9 @@ const styles = StyleSheet.create({
   proposalDoc: {
     backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginTop: 10,
   },
   docHeader: {
@@ -561,23 +595,25 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   docBadge: {
-    backgroundColor: "#F1F5F9",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 4,
     paddingHorizontal: 8,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
     flex: 1,
     marginRight: 8,
   },
   docBadgeText: {
     fontSize: 10,
-    fontWeight: "700",
-    color: "#475569",
+    fontWeight: "600",
+    color: COLORS.textSecondary,
   },
   docSaveBtn: {
     backgroundColor: COLORS.primary,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   docSaveBtnText: {
     color: "#FFFFFF",
@@ -590,24 +626,25 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     marginTop: 10,
     marginBottom: 6,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   fieldInputSingle: {
-    backgroundColor: "#F9FAFB",
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     paddingHorizontal: 10,
     paddingVertical: 7,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
     color: COLORS.textPrimary,
     marginBottom: 6,
   },
   fieldInputMulti: {
-    backgroundColor: "#F9FAFB",
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     padding: 10,
     fontSize: 12,
     color: COLORS.textPrimary,
@@ -615,15 +652,19 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   savedAlert: {
-    backgroundColor: "#ECFDF5",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.riskSafe,
     padding: 8,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
     marginTop: 10,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   savedAlertText: {
     fontSize: 12,
-    color: "#059669",
+    color: COLORS.riskSafe,
     fontWeight: "700",
   },
   proposalActionRow: {
@@ -633,10 +674,14 @@ const styles = StyleSheet.create({
   },
   downloadPdfBtn: {
     flex: 1,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   downloadPdfText: {
     fontSize: 12,
@@ -645,29 +690,36 @@ const styles = StyleSheet.create({
   },
   submitCenterBtn: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   submitCenterText: {
     color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   matchingFilterBox: {
     backgroundColor: COLORS.surface,
     padding: 14,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginBottom: 12,
+  },
+  filterTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
   },
   matchingTitle: {
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
-    marginBottom: 6,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   filterChipRow: {
     flexDirection: "row",
@@ -676,10 +728,12 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   filterTag: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 4,
     paddingHorizontal: 8,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   filterTagText: {
     fontSize: 11,
@@ -693,15 +747,16 @@ const styles = StyleSheet.create({
   },
   programCard: {
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   programCardSelected: {
-    borderColor: COLORS.primary,
-    borderWidth: 1.5,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
   progTop: {
     flexDirection: "row",
@@ -710,25 +765,29 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   progDDayBadge: {
-    paddingVertical: 3,
-    paddingHorizontal: 7,
-    borderRadius: 4,
+    backgroundColor: COLORS.accent,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   progDDayText: {
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: "700",
     color: "#FFFFFF",
+    fontVariant: ["tabular-nums"],
   },
   progGrant: {
     fontSize: 14,
     fontWeight: "800",
-    color: COLORS.primary,
+    color: COLORS.accent,
+    fontVariant: ["tabular-nums"],
   },
   progTitle: {
     fontSize: 15,
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 6,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   progTarget: {
     fontSize: 11,
@@ -743,25 +802,31 @@ const styles = StyleSheet.create({
   },
   progDeadline: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginBottom: 10,
   },
   progApplyBtn: {
-    backgroundColor: COLORS.primaryLight,
-    paddingVertical: 8,
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingVertical: 9,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   progApplyBtnText: {
     fontSize: 12,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
+    marginRight: 4,
   },
   timelineHeading: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 2,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   timelineSub: {
     fontSize: 12,
@@ -770,10 +835,10 @@ const styles = StyleSheet.create({
   },
   timelineList: {
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   timelineItem: {
     flexDirection: "row",
@@ -785,31 +850,36 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   timelineCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#E5E7EB",
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     alignItems: "center",
     justifyContent: "center",
   },
   timelineCircleDone: {
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   timelineCircleProgress: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   timelineCircleText: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "700",
     color: COLORS.textSecondary,
+    fontVariant: ["tabular-nums"],
   },
   timelineCircleTextActive: {
     color: "#FFFFFF",
   },
   timelineLine: {
     flex: 1,
-    width: 2,
-    backgroundColor: "#E5E7EB",
+    width: 1,
+    backgroundColor: COLORS.line,
     marginTop: 4,
   },
   timelineRight: {
@@ -827,49 +897,54 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   statusPillDone: {
-    backgroundColor: "#ECFDF5",
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderRadius: 4,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingVertical: 1,
+    paddingHorizontal: 5,
+    borderRadius: METRICS.borderRadiusSm,
   },
   statusPillDoneText: {
     fontSize: 10,
     fontWeight: "700",
-    color: "#059669",
+    color: COLORS.riskSafe,
   },
   statusPillProgress: {
-    backgroundColor: COLORS.primaryLight,
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderRadius: 4,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingVertical: 1,
+    paddingHorizontal: 5,
+    borderRadius: METRICS.borderRadiusSm,
   },
   statusPillProgressText: {
     fontSize: 10,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
   },
   timelineDescText: {
     fontSize: 12,
     color: COLORS.textSecondary,
     lineHeight: 17,
   },
+  archiveHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   archiveHeading: {
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
-    marginBottom: 10,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   emptyCard: {
     backgroundColor: COLORS.surface,
     padding: 24,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-  },
-  emptyEmoji: {
-    fontSize: 28,
-    marginBottom: 6,
+    borderColor: COLORS.line,
   },
   emptyNotice: {
     fontSize: 13,
@@ -880,7 +955,7 @@ const styles = StyleSheet.create({
   emptyActionText: {
     fontSize: 12,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
   },
   archiveCard: {
     flexDirection: "row",
@@ -888,26 +963,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.surface,
     padding: 14,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusSm,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   archiveTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   archiveMeta: {
     fontSize: 11,
     color: COLORS.textSecondary,
     marginTop: 2,
+    fontVariant: ["tabular-nums"],
   },
   archiveActionBtn: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   archiveActionBtnText: {
     fontSize: 11,
@@ -916,17 +995,22 @@ const styles = StyleSheet.create({
   },
   settingsBox: {
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginTop: 10,
+  },
+  settingsTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
   settingsTitle: {
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
-    marginBottom: 10,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   settingItem: {
     flexDirection: "row",
@@ -934,7 +1018,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: COLORS.line,
   },
   settingItemTitle: {
     fontSize: 13,
@@ -943,11 +1027,7 @@ const styles = StyleSheet.create({
   },
   settingItemSub: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginTop: 2,
-  },
-  settingArrow: {
-    fontSize: 14,
-    color: COLORS.textTertiary,
   },
 });

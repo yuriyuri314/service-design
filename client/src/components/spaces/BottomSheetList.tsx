@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, PanResponder } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { Space } from "../../types";
 import { SpaceCard } from "./SpaceCard";
 
@@ -49,7 +49,7 @@ export const BottomSheetList: React.FC<BottomSheetListProps> = ({
         <View style={styles.handleBar} />
         <View style={styles.headerInfoRow}>
           <Text style={styles.sheetTitle}>
-            발굴된 유휴공간 <Text style={styles.countText}>{spaces.length}</Text>곳
+            발굴 공간 <Text style={styles.countText}>{spaces.length}</Text>곳
           </Text>
           <View style={styles.snapPills}>
             <TouchableOpacity
@@ -88,8 +88,7 @@ export const BottomSheetList: React.FC<BottomSheetListProps> = ({
       >
         {spaces.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyEmoji}>🔍</Text>
-            <Text style={styles.emptyText}>선택한 조건의 유휴공간이 없습니다.</Text>
+            <Text style={styles.emptyText}>선택한 조건의 공간이 없습니다.</Text>
             <Text style={styles.emptySubText}>필터를 변경해 다른 공간을 찾아보세요.</Text>
           </View>
         ) : (
@@ -126,29 +125,28 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: COLORS.surface,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    elevation: 12,
+    borderTopLeftRadius: METRICS.borderRadiusLg,
+    borderTopRightRadius: METRICS.borderRadiusLg,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: COLORS.line,
     zIndex: 50,
   },
   handleHeader: {
-    paddingTop: 10,
+    paddingTop: 8,
     paddingBottom: 8,
     paddingHorizontal: 16,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: COLORS.line,
   },
   handleBar: {
-    width: 38,
-    height: 4,
+    width: 36,
+    height: 3,
     borderRadius: 2,
-    backgroundColor: "#D1D5DB",
-    marginBottom: 10,
+    backgroundColor: COLORS.line,
+    marginBottom: 8,
   },
   headerInfoRow: {
     flexDirection: "row",
@@ -157,40 +155,43 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   sheetTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
   },
   countText: {
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "800",
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   snapPills: {
     flexDirection: "row",
-    backgroundColor: "#F3F4F6",
-    borderRadius: 14,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 2,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   snapPill: {
     paddingVertical: 3,
     paddingHorizontal: 8,
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusSm,
   },
   snapPillActive: {
-    backgroundColor: "#FFFFFF",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   snapPillText: {
-    fontSize: 10,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 11,
     fontWeight: "600",
     color: COLORS.textSecondary,
   },
   snapPillTextActive: {
     color: COLORS.primary,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   listScrollView: {
     flex: 1,
@@ -200,30 +201,26 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
   cardWrapper: {
-    borderRadius: 16,
     marginBottom: 4,
   },
   cardWrapperSelected: {
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-    borderRadius: 18,
-    padding: 2,
+    borderWidth: 1,
+    borderColor: COLORS.accent,
+    borderRadius: METRICS.borderRadiusMd,
   },
   emptyContainer: {
     paddingVertical: 40,
     alignItems: "center",
     justifyContent: "center",
   },
-  emptyEmoji: {
-    fontSize: 36,
-    marginBottom: 8,
-  },
   emptyText: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
   },
   emptySubText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     color: COLORS.textSecondary,
     marginTop: 4,

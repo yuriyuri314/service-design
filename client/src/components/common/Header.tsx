@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { APP_NAME, COLORS } from "../../constants/theme";
+import { ArrowLeft } from "lucide-react-native";
+import { APP_NAME, COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { useApp } from "../../context/AppContext";
 
 interface HeaderProps {
@@ -26,8 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
     <View style={styles.container}>
       <View style={styles.leftRow}>
         {onBack ? (
-          <TouchableOpacity onPress={onBack} style={styles.backButton}>
-            <Text style={styles.backArrow}>←</Text>
+          <TouchableOpacity onPress={onBack} style={styles.backButton} activeOpacity={0.7}>
+            <ArrowLeft size={20} color={COLORS.textPrimary} strokeWidth={1.75} />
           </TouchableOpacity>
         ) : null}
         <View>
@@ -68,31 +69,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: COLORS.line,
   },
   leftRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   backButton: {
-    paddingRight: 12,
+    paddingRight: 10,
     paddingVertical: 4,
   },
-  backArrow: {
-    fontSize: 22,
-    fontWeight: "600",
-    color: COLORS.textPrimary,
-  },
   logoTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.primary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
   },
   locationSubtitle: {
-    fontSize: 10,
-    color: COLORS.textTertiary,
-    marginTop: -1,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 11,
+    color: COLORS.textSecondary,
+    marginTop: 1,
   },
   rightRow: {
     flexDirection: "row",
@@ -101,33 +99,34 @@ const styles = StyleSheet.create({
   roleSwitchButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
     paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 20,
+    paddingHorizontal: 9,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#D6DCFF",
+    borderColor: COLORS.line,
   },
   roleSwitchOwner: {
-    backgroundColor: "#F3F4F6",
-    borderColor: "#E5E7EB",
+    backgroundColor: COLORS.surface,
+    borderColor: COLORS.primary,
   },
   roleDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.primary,
-    marginRight: 5,
+    backgroundColor: COLORS.accent,
+    marginRight: 6,
   },
   roleDotOwner: {
-    backgroundColor: "#4B5563",
+    backgroundColor: COLORS.primary,
   },
   roleSwitchText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.textPrimary,
   },
   roleSwitchTextOwner: {
-    color: "#374151",
+    color: COLORS.primary,
   },
 });

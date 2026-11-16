@@ -6,11 +6,25 @@ import {
   ScrollView, 
   TouchableOpacity, 
   TextInput, 
-  Image,
-  Alert,
-  Platform 
+  Image, 
+  Alert 
 } from "react-native";
-import { COLORS } from "../constants/theme";
+import { 
+  Wrench, 
+  FileText, 
+  Building2, 
+  Plus, 
+  Inbox, 
+  Building, 
+  Camera, 
+  Check, 
+  User, 
+  Bell, 
+  ChevronLeft, 
+  ChevronRight,
+  ShieldCheck 
+} from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/common/Header";
 import { HighlightBox } from "../components/common/HighlightBox";
@@ -45,7 +59,7 @@ export const OwnerHomeScreen: React.FC = () => {
 
   const handleCompleteRegister = () => {
     if (!regTitle.trim()) {
-      Alert.alert("알림", "공간 이름을 입력해주세요.");
+      Alert.alert("알림", "공간 명칭을 입력해주세요.");
       return;
     }
 
@@ -108,31 +122,34 @@ export const OwnerHomeScreen: React.FC = () => {
         {/* 소유자 탭: 1. 홈 (개요 & 이점) */}
         {ownerActiveTab === "HOME" && (
           <View>
-            {/* 소유자가 얻는 3대 이점 배너 (필수 요구사항!) */}
+            {/* 소유자가 얻는 3대 이점 배너 */}
             <View style={styles.benefitBanner}>
-              <Text style={styles.benefitTag}>안심 임대 플랫폼</Text>
+              <View style={styles.benefitTagRow}>
+                <ShieldCheck size={14} color={COLORS.accent} strokeWidth={2} style={{ marginRight: 5 }} />
+                <Text style={styles.benefitTag}>안심 임대 안내</Text>
+              </View>
               <Text style={styles.benefitTitle}>
                 방치된 빈집·빈상가,{"\n"}믿을 수 있는 청년에게 맡기세요
               </Text>
               <Text style={styles.benefitDesc}>
-                빈자리 태백은 낯선 청년에게 무작정 임대하지 않습니다. 객관적인 AI 창업 검토 리포트와 태백시 청년창창센터의 현장 동행으로 건물 관리 부담을 덜어드립니다.
+                빈자리 태백은 낯선 청년에게 무작정 임대하지 않습니다. 객관적인 사전 진단 리포트와 태백시 청년창창센터의 현장 동행으로 건물 관리 부담을 덜어드립니다.
               </Text>
 
               <View style={styles.benefitCardGrid}>
                 <View style={styles.benefitCard}>
-                  <Text style={styles.benefitIcon}>🧹</Text>
+                  <Wrench size={18} color={COLORS.surface} strokeWidth={1.75} style={{ marginBottom: 4 }} />
                   <Text style={styles.benefitCardTitle}>관리 부담 감소</Text>
                   <Text style={styles.benefitCardDesc}>공실 방치로 인한 동파, 누수, 노후화를 막고 건물의 가치를 유지합니다.</Text>
                 </View>
 
                 <View style={styles.benefitCard}>
-                  <Text style={styles.benefitIcon}>📊</Text>
+                  <FileText size={18} color={COLORS.surface} strokeWidth={1.75} style={{ marginBottom: 4 }} />
                   <Text style={styles.benefitCardTitle}>검증된 사업 계획</Text>
-                  <Text style={styles.benefitCardDesc}>AI가 검토한 예상 수리비, 손익분기점, 운영 기간 약속을 사전에 확인합니다.</Text>
+                  <Text style={styles.benefitCardDesc}>사전 진단한 예상 수리비, 손익분기점, 운영 기간 약속을 사전에 확인합니다.</Text>
                 </View>
 
                 <View style={styles.benefitCard}>
-                  <Text style={styles.benefitIcon}>🏛️</Text>
+                  <Building2 size={18} color={COLORS.surface} strokeWidth={1.75} style={{ marginBottom: 4 }} />
                   <Text style={styles.benefitCardTitle}>지원기관 현장 동행</Text>
                   <Text style={styles.benefitCardDesc}>청년창창센터 전담 매니저가 현장 방문부터 시 보조금 매칭까지 함께합니다.</Text>
                 </View>
@@ -148,7 +165,7 @@ export const OwnerHomeScreen: React.FC = () => {
                   setIsRegistering(true);
                 }}
               >
-                <Text style={styles.quickActionIcon}>➕</Text>
+                <Plus size={24} color={COLORS.accent} strokeWidth={2} style={{ marginRight: 14 }} />
                 <View>
                   <Text style={styles.quickActionTitle}>새 유휴공간 등록하기</Text>
                   <Text style={styles.quickActionSub}>사진과 조건 입력으로 청년 매칭 시작</Text>
@@ -159,10 +176,10 @@ export const OwnerHomeScreen: React.FC = () => {
                 style={styles.quickActionCard}
                 onPress={() => setOwnerActiveTab("REQUESTS")}
               >
-                <Text style={styles.quickActionIcon}>📬</Text>
+                <Inbox size={24} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 14 }} />
                 <View>
                   <Text style={styles.quickActionTitle}>도착한 협의 요청 확인 ({requestList.length}건)</Text>
-                  <Text style={styles.quickActionSub}>청년 창업 프로필 및 AI 리포트 검토</Text>
+                  <Text style={styles.quickActionSub}>청년 창업 프로필 및 진단 리포트 확인</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -175,7 +192,10 @@ export const OwnerHomeScreen: React.FC = () => {
             {!isRegistering ? (
               <View>
                 <View style={styles.sectionHeaderRow}>
-                  <Text style={styles.sectionHeading}>🏢 내가 등록한 유휴공간 ({mySpaces.length})</Text>
+                  <View style={styles.sectionHeadingRow}>
+                    <Building size={16} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+                    <Text style={styles.sectionHeading}>내가 등록한 유휴공간 ({mySpaces.length})</Text>
+                  </View>
                   <TouchableOpacity 
                     style={styles.addBtn}
                     onPress={() => setIsRegistering(true)}
@@ -225,9 +245,9 @@ export const OwnerHomeScreen: React.FC = () => {
                       style={[styles.photoUploadBox, regPhotoAttached && styles.photoUploadBoxActive]}
                       onPress={() => setRegPhotoAttached(prev => !prev)}
                     >
-                      <Text style={styles.uploadIconLarge}>📷</Text>
+                      <Camera size={28} color={regPhotoAttached ? COLORS.accent : COLORS.primary} strokeWidth={1.75} style={{ marginBottom: 6 }} />
                       <Text style={styles.uploadTitleLarge}>
-                        {regPhotoAttached ? "✓ 사진 4장 첨부 완료" : "스마트폰으로 현장 사진 촬영 / 선택"}
+                        {regPhotoAttached ? "사진 4장 첨부 완료" : "스마트폰으로 현장 사진 촬영 / 선택"}
                       </Text>
                       <Text style={styles.uploadSubLarge}>
                         {regPhotoAttached ? "터치하면 사진을 다시 선택합니다." : "외관, 출입구, 내부 바닥/천장 사진"}
@@ -238,6 +258,7 @@ export const OwnerHomeScreen: React.FC = () => {
                     <TextInput
                       style={styles.inputField}
                       placeholder="예: 철암천변 햇살 드는 1층 단독 상가"
+                      placeholderTextColor={COLORS.textSecondary}
                       value={regTitle}
                       onChangeText={setRegTitle}
                     />
@@ -271,6 +292,7 @@ export const OwnerHomeScreen: React.FC = () => {
                     <TextInput
                       style={styles.inputField}
                       placeholder="예: 강원특별자치도 태백시 동태백로 100"
+                      placeholderTextColor={COLORS.textSecondary}
                       value={regAddress}
                       onChangeText={setRegAddress}
                     />
@@ -288,6 +310,7 @@ export const OwnerHomeScreen: React.FC = () => {
                       style={styles.inputField}
                       keyboardType="numeric"
                       placeholder="예: 25"
+                      placeholderTextColor={COLORS.textSecondary}
                       value={regAreaPyeong}
                       onChangeText={setRegAreaPyeong}
                     />
@@ -320,7 +343,7 @@ export const OwnerHomeScreen: React.FC = () => {
                 {regStep === 4 && (
                   <View style={styles.formStepBox}>
                     <Text style={styles.formStepHeading}>희망하시는 임대 조건</Text>
-                    <Text style={styles.formStepSub}>착한 임대(무상 또는 반값)를 제안하시면 시 보조금 매칭 우선 대상이 됩니다.</Text>
+                    <Text style={styles.formStepSub}>착한 임대(무상 또는 감면)를 제안하시면 시 보조금 매칭 우선 대상이 됩니다.</Text>
 
                     <View style={styles.rentTypeChoiceRow}>
                       <TouchableOpacity
@@ -328,7 +351,7 @@ export const OwnerHomeScreen: React.FC = () => {
                         onPress={() => setRegRentType("FREE")}
                       >
                         <Text style={[styles.rentTypeBtnText, regRentType === "FREE" && styles.rentTypeBtnTextActive]}>
-                          🎁 초기 무상임대 협의 (1~2년)
+                          초기 무상임대 협의 (1~2년)
                         </Text>
                       </TouchableOpacity>
 
@@ -337,7 +360,7 @@ export const OwnerHomeScreen: React.FC = () => {
                         onPress={() => setRegRentType("MONTHLY")}
                       >
                         <Text style={[styles.rentTypeBtnText, regRentType === "MONTHLY" && styles.rentTypeBtnTextActive]}>
-                          💵 일반 월세 계약
+                          일반 월세 계약
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -364,7 +387,8 @@ export const OwnerHomeScreen: React.FC = () => {
 
                     {regSuccess && (
                       <View style={styles.successBannerBox}>
-                        <Text style={styles.successBannerText}>✓ 유휴공간이 등록되었습니다! 청년 매칭을 시작합니다.</Text>
+                        <Check size={14} color={COLORS.riskSafe} strokeWidth={2} style={{ marginRight: 6 }} />
+                        <Text style={styles.successBannerText}>유휴공간이 등록되었습니다. 청년 매칭을 시작합니다.</Text>
                       </View>
                     )}
                   </View>
@@ -377,7 +401,8 @@ export const OwnerHomeScreen: React.FC = () => {
                       style={styles.formPrevBtn}
                       onPress={() => setRegStep(prev => prev - 1)}
                     >
-                      <Text style={styles.formPrevBtnText}>◀ 이전</Text>
+                      <ChevronLeft size={16} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginRight: 2 }} />
+                      <Text style={styles.formPrevBtnText}>이전</Text>
                     </TouchableOpacity>
                   ) : <View style={{ width: 60 }} />}
 
@@ -392,7 +417,7 @@ export const OwnerHomeScreen: React.FC = () => {
                     }}
                   >
                     <Text style={styles.formNextBtnText}>
-                      {regStep < 4 ? "다음 단계 →" : "✓ 유휴공간 등록 완료"}
+                      {regStep < 4 ? "다음 단계" : "유휴공간 등록 완료"}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -404,8 +429,11 @@ export const OwnerHomeScreen: React.FC = () => {
         {/* 소유자 탭: 3. 협의 요청 (청년 요청 수락/보류 관리) */}
         {ownerActiveTab === "REQUESTS" && (
           <View>
-            <Text style={styles.sectionHeading}>📬 도착한 청년 협의 요청 ({requestList.length}건)</Text>
-            <Text style={styles.sectionSub}>청년이 제출한 AI 검토 리포트와 사업 운영 계획을 확인하고 협의를 진행하세요.</Text>
+            <View style={styles.sectionHeadingRow}>
+              <Inbox size={16} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
+              <Text style={styles.sectionHeading}>도착한 청년 협의 요청 ({requestList.length}건)</Text>
+            </View>
+            <Text style={styles.sectionSub}>청년이 제출한 진단 리포트와 사업 운영 계획을 확인하고 협의를 진행하세요.</Text>
 
             {requestList.map((chat) => (
               <View key={chat.id} style={styles.requestCardItem}>
@@ -419,10 +447,9 @@ export const OwnerHomeScreen: React.FC = () => {
                   </View>
                 </View>
 
-                {/* 청년이 첨부한 AI 검토 리포트 요약 카드 */}
+                {/* 청년이 첨부한 진단 리포트 요약 카드 */}
                 <HighlightBox
-                  title="첨부된 AI 창업 검토 리포트 핵심 요약"
-                  icon={<Text>📊</Text>}
+                  title="첨부된 진단 리포트 핵심 요약"
                 >
                   {`• 추천 업종: 탄광 문화 수제맥주 브루펍\n• 운영 기간 약속: 최소 3년 이상 장기 운영\n• 예상 시설 개선비: 약 1,450만원 (태백시 지원사업 신청 예정)\n• 건물 관리 계획: 벽돌 외관 원형 보존 및 배관 전면 교체`}
                 </HighlightBox>
@@ -432,7 +459,7 @@ export const OwnerHomeScreen: React.FC = () => {
                     style={styles.requestAcceptBtn}
                     onPress={() => handleAcceptRequest(chat.id)}
                   >
-                    <Text style={styles.requestAcceptBtnText}>✓ 협의 수락 (채팅방 열기)</Text>
+                    <Text style={styles.requestAcceptBtnText}>협의 수락 (채팅방 열기)</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity 
@@ -451,7 +478,9 @@ export const OwnerHomeScreen: React.FC = () => {
         {ownerActiveTab === "MY_PAGE" && (
           <View>
             <View style={styles.profileBox}>
-              <Text style={styles.profileEmoji}>🏡</Text>
+              <View style={styles.profileIconWrap}>
+                <User size={30} color={COLORS.primary} strokeWidth={1.75} />
+              </View>
               <Text style={styles.profileName}>태백 공간 소유자 님</Text>
               <Text style={styles.profileSub}>등록 공간 2개 · 진행 중인 협의 2건</Text>
             </View>
@@ -465,10 +494,10 @@ export const OwnerHomeScreen: React.FC = () => {
                 }}
               >
                 <View>
-                  <Text style={styles.switchModeTitle}>🌱 청년 창업가 모드로 전환</Text>
-                  <Text style={styles.switchModeSub}>공간 찾기, AI 리포트, 지원사업 신청</Text>
+                  <Text style={styles.switchModeTitle}>청년 창업가 모드로 전환</Text>
+                  <Text style={styles.switchModeSub}>공간 찾기, 계약 전 진단, 지원사업 신청</Text>
                 </View>
-                <Text style={styles.switchModeArrow}>→</Text>
+                <ChevronRight size={16} color={COLORS.textSecondary} strokeWidth={1.75} />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -476,10 +505,10 @@ export const OwnerHomeScreen: React.FC = () => {
                 onPress={() => Alert.alert("알림 설정", "신규 청년 협의 요청 알림이 켜졌습니다.")}
               >
                 <View>
-                  <Text style={styles.switchModeTitle}>🔔 협의 알림 설정</Text>
+                  <Text style={styles.switchModeTitle}>협의 알림 설정</Text>
                   <Text style={styles.switchModeSub}>새로운 청년 협의 요청 시 알림</Text>
                 </View>
-                <Text style={styles.switchModeArrow}>→</Text>
+                <Bell size={16} color={COLORS.textSecondary} strokeWidth={1.75} />
               </TouchableOpacity>
             </View>
           </View>
@@ -501,57 +530,57 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   benefitBanner: {
-    backgroundColor: "#1E293B",
-    borderRadius: 20,
-    padding: 20,
+    backgroundColor: COLORS.primary,
+    borderRadius: METRICS.borderRadiusMd,
+    padding: 18,
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+  },
+  benefitTagRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
   },
   benefitTag: {
-    color: "#60A5FA",
+    color: COLORS.line,
     fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 1,
-    marginBottom: 4,
+    fontWeight: "700",
   },
   benefitTitle: {
     fontSize: 20,
-    fontWeight: "900",
-    color: "#FFFFFF",
+    fontWeight: "700",
+    color: COLORS.surface,
     lineHeight: 28,
     marginBottom: 8,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   benefitDesc: {
-    fontSize: 12,
-    color: "#94A3B8",
+    fontSize: 13,
+    color: COLORS.line,
     lineHeight: 18,
     marginBottom: 16,
+    fontFamily: TYPOGRAPHY.bodyFont,
   },
   benefitCardGrid: {
     gap: 10,
   },
   benefitCard: {
     backgroundColor: "rgba(255, 255, 255, 0.08)",
-    borderRadius: 12,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 12,
-  },
-  benefitIcon: {
-    fontSize: 22,
-    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.12)",
   },
   benefitCardTitle: {
     fontSize: 13,
-    fontWeight: "800",
-    color: "#FFFFFF",
+    fontWeight: "700",
+    color: COLORS.surface,
     marginBottom: 2,
   },
   benefitCardDesc: {
     fontSize: 11,
-    color: "#CBD5E1",
+    color: COLORS.line,
     lineHeight: 16,
   },
   quickActionGroup: {
@@ -563,18 +592,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-  },
-  quickActionIcon: {
-    fontSize: 28,
-    marginRight: 14,
+    borderColor: COLORS.line,
   },
   quickActionTitle: {
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   quickActionSub: {
     fontSize: 11,
@@ -587,10 +613,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 14,
   },
+  sectionHeadingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   sectionHeading: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   sectionSub: {
     fontSize: 12,
@@ -601,7 +632,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: METRICS.borderRadiusSm,
   },
   addBtnText: {
     color: "#FFFFFF",
@@ -611,18 +642,20 @@ const styles = StyleSheet.create({
   mySpaceCard: {
     flexDirection: "row",
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     alignItems: "center",
   },
   mySpaceThumb: {
     width: 75,
     height: 75,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 12,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   mySpaceInfo: {
     flex: 1,
@@ -643,23 +676,26 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 2,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   mySpaceMeta: {
     fontSize: 11,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginBottom: 2,
+    fontVariant: ["tabular-nums"],
   },
   mySpacePrice: {
     fontSize: 13,
     fontWeight: "800",
-    color: COLORS.primary,
+    color: COLORS.accent,
+    fontVariant: ["tabular-nums"],
   },
   formContainer: {
     backgroundColor: COLORS.surface,
-    borderRadius: 18,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 18,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   formTopBar: {
     flexDirection: "row",
@@ -667,13 +703,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
+    borderBottomColor: COLORS.line,
     paddingBottom: 10,
   },
   formTitle: {
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   formCancelText: {
     fontSize: 13,
@@ -685,9 +722,10 @@ const styles = StyleSheet.create({
   },
   formStepHeading: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   formStepSub: {
     fontSize: 12,
@@ -695,23 +733,18 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   photoUploadBox: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: "#CBD5E1",
-    borderStyle: "dashed",
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     padding: 20,
     alignItems: "center",
     marginBottom: 16,
   },
   photoUploadBoxActive: {
-    backgroundColor: COLORS.primaryLight,
-    borderColor: COLORS.primary,
-    borderStyle: "solid",
-  },
-  uploadIconLarge: {
-    fontSize: 32,
-    marginBottom: 6,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
   uploadTitleLarge: {
     fontSize: 14,
@@ -729,12 +762,13 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     marginBottom: 6,
     marginTop: 6,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   inputField: {
-    backgroundColor: "#F9FAFB",
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     paddingHorizontal: 12,
     paddingVertical: 9,
     fontSize: 13,
@@ -748,12 +782,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   dongCard: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 20,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   dongCardSelected: {
     backgroundColor: COLORS.primary,
@@ -771,15 +805,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   condRadioItem: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
     padding: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   condRadioItemSelected: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
   condRadioText: {
     fontSize: 12,
@@ -787,23 +822,24 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   condRadioTextSelected: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   rentTypeChoiceRow: {
     gap: 8,
     marginBottom: 12,
   },
   rentTypeBtn: {
-    backgroundColor: "#F8FAFC",
+    backgroundColor: COLORS.background,
     padding: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   rentTypeBtnActive: {
-    backgroundColor: COLORS.primaryLight,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
   rentTypeBtnText: {
     fontSize: 13,
@@ -811,32 +847,38 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
   rentTypeBtnTextActive: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   successBannerBox: {
-    backgroundColor: "#ECFDF5",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.riskSafe,
     padding: 12,
-    borderRadius: 8,
+    borderRadius: METRICS.borderRadiusSm,
     marginTop: 10,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   successBannerText: {
-    color: "#059669",
+    color: COLORS.riskSafe,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   formNavRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 14,
     borderTopWidth: 1,
-    borderTopColor: "#F1F5F9",
+    borderTopColor: COLORS.line,
     paddingTop: 14,
   },
   formPrevBtn: {
     paddingVertical: 10,
     paddingHorizontal: 16,
+    flexDirection: "row",
+    alignItems: "center",
   },
   formPrevBtnText: {
     fontSize: 13,
@@ -847,20 +889,20 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingVertical: 12,
     paddingHorizontal: 22,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
   },
   formNextBtnText: {
     color: "#FFFFFF",
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   requestCardItem: {
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   requestCardHeader: {
     flexDirection: "row",
@@ -873,18 +915,21 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: COLORS.textPrimary,
     maxWidth: 220,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   requestYouthName: {
     fontSize: 12,
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "600",
     marginTop: 2,
   },
   requestStepBadge: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 3,
     paddingHorizontal: 8,
-    borderRadius: 6,
+    borderRadius: METRICS.borderRadiusSm,
   },
   requestStepBadgeText: {
     color: COLORS.primary,
@@ -898,21 +943,23 @@ const styles = StyleSheet.create({
   },
   requestAcceptBtn: {
     flex: 2,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
   },
   requestAcceptBtnText: {
     color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   requestHoldBtn: {
     flex: 1,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
   },
   requestHoldBtnText: {
@@ -922,21 +969,29 @@ const styles = StyleSheet.create({
   },
   profileBox: {
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 24,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     marginBottom: 16,
   },
-  profileEmoji: {
-    fontSize: 40,
-    marginBottom: 8,
+  profileIconWrap: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
   },
   profileName: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   profileSub: {
     fontSize: 12,
@@ -952,22 +1007,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   switchModeTitle: {
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   switchModeSub: {
     fontSize: 11,
     color: COLORS.textSecondary,
     marginTop: 2,
-  },
-  switchModeArrow: {
-    fontSize: 16,
-    color: COLORS.textTertiary,
   },
 });

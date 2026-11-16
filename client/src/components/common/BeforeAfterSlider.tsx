@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, PanResponder, Platform } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -13,7 +13,6 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   afterImage,
   concept,
 }) => {
-  // 0% ~ 100% (기본값 50%)
   const [sliderPos, setSliderPos] = useState(50);
   const [containerWidth, setContainerWidth] = useState(320);
 
@@ -27,7 +26,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
     <View style={styles.wrapper}>
       {concept && (
         <View style={styles.conceptHeader}>
-          <Text style={styles.conceptTitle}>🎨 AI 예상 리모델링 컨셉</Text>
+          <Text style={styles.conceptTitle}>리모델링 예상 모습</Text>
           <Text style={styles.conceptDesc}>{concept}</Text>
         </View>
       )}
@@ -45,7 +44,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           resizeMode="cover"
         />
         <View style={styles.afterLabel}>
-          <Text style={styles.labelText}>After (리모델링 후)</Text>
+          <Text style={styles.labelText}>공사 후</Text>
         </View>
 
         {/* Before 이미지 (sliderPos % 만큼만 보이도록 클리핑) */}
@@ -56,20 +55,20 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
             resizeMode="cover"
           />
           <View style={styles.beforeLabel}>
-            <Text style={styles.labelText}>Before (현재 상태)</Text>
+            <Text style={styles.labelText}>현재 상태</Text>
           </View>
         </View>
 
         {/* 드래그 디바이더 바 & 핸들 */}
         <View style={[styles.dividerLine, { left: `${sliderPos}%` }]}>
           <View style={styles.sliderHandle}>
-            <Text style={styles.handleArrows}>◀ ▶</Text>
+            <Text style={styles.handleArrows}>|</Text>
           </View>
         </View>
       </View>
 
       <Text style={styles.hintText}>
-        👆 가운데 선을 좌우로 드래그하여 리모델링 전/후 모습을 비교해 보세요.
+        가운데 분할선을 좌우로 움직여 공사 전후 모습을 비교해 보세요.
       </Text>
     </View>
   );
@@ -83,24 +82,27 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   conceptTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
   },
   conceptDesc: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     color: COLORS.textSecondary,
     marginTop: 2,
+    lineHeight: 18,
   },
   container: {
     width: "100%",
     height: 220,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     overflow: "hidden",
     position: "relative",
-    backgroundColor: "#E2E8F0",
+    backgroundColor: COLORS.background,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
   },
   image: {
     width: "100%",
@@ -117,63 +119,56 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     bottom: 0,
-    width: 3,
-    backgroundColor: "#FFFFFF",
-    transform: [{ translateX: -1.5 }],
+    width: 2,
+    backgroundColor: COLORS.surface,
+    transform: [{ translateX: -1 }],
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
   },
   sliderHandle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: COLORS.primary,
-    borderWidth: 2.5,
-    borderColor: "#FFFFFF",
+    width: 28,
+    height: 28,
+    borderRadius: METRICS.borderRadiusFull,
+    backgroundColor: COLORS.accent,
+    borderWidth: 2,
+    borderColor: COLORS.surface,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 4,
   },
   handleArrows: {
-    color: "#FFFFFF",
-    fontSize: 9,
-    fontWeight: "800",
+    color: COLORS.surface,
+    fontSize: 11,
+    fontWeight: "700",
   },
   beforeLabel: {
     position: "absolute",
     bottom: 10,
     left: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.65)",
+    backgroundColor: COLORS.primary,
     paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 6,
+    paddingHorizontal: 7,
+    borderRadius: METRICS.borderRadiusSm,
   },
   afterLabel: {
     position: "absolute",
     bottom: 10,
     right: 10,
-    backgroundColor: "rgba(82, 113, 255, 0.85)",
+    backgroundColor: COLORS.accent,
     paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 6,
+    paddingHorizontal: 7,
+    borderRadius: METRICS.borderRadiusSm,
   },
   labelText: {
-    color: "#FFFFFF",
-    fontSize: 10,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    color: COLORS.surface,
+    fontSize: 11,
     fontWeight: "700",
   },
   hintText: {
-    fontSize: 11,
-    color: COLORS.textTertiary,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 12,
+    color: COLORS.textSecondary,
     textAlign: "center",
     marginTop: 6,
   },

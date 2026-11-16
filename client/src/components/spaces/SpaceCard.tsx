@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Heart } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { Space } from "../../types";
 import { useApp } from "../../context/AppContext";
+import { RiskBadge } from "../common/RiskBadge";
 
 interface SpaceCardProps {
   space: Space;
@@ -20,29 +22,22 @@ export const SpaceCard: React.FC<SpaceCardProps> = ({
 
   const formatRent = () => {
     if (space.rentType === "FREE_NEGOTIATION") {
-      return `무상협의 (보증금 ${space.deposit}만)`;
+      return `무상협의 · 보증금 ${space.deposit}만`;
     }
     return `월세 ${space.deposit}/${space.monthlyRent}만`;
   };
 
-  const getConditionColor = () => {
-    switch (space.conditionGrade) {
-      case "A":
-        return COLORS.riskSafe;
-      case "B":
-        return COLORS.riskCaution;
-      case "C":
-        return COLORS.riskDanger;
-      default:
-        return COLORS.textSecondary;
-    }
+  const getRiskLevel = () => {
+    if (space.conditionGrade === "A") return "SAFE";
+    if (space.conditionGrade === "B") return "CAUTION";
+    return "DANGER";
   };
 
   return (
     <TouchableOpacity
       style={[styles.card, horizontal ? styles.cardHorizontal : styles.cardVertical]}
       onPress={onPress}
-      activeOpacity={0.88}
+      activeOpacity={0.85}
     >
       {/* 썸네일 이미지 */}
       <View style={[styles.imageContainer, horizontal && styles.imageContainerHorizontal]}>
@@ -61,29 +56,35 @@ export const SpaceCard: React.FC<SpaceCardProps> = ({
           }}
           activeOpacity={0.8}
         >
-          <Text style={styles.bookmarkHeart}>{bookmarked ? "❤️" : "🤍"}</Text>
+          <Heart 
+            size={18} 
+            color={bookmarked ? COLORS.accent : COLORS.surface} 
+            fill={bookmarked ? COLORS.accent : "rgba(0, 0, 0, 0.35)"}
+            strokeWidth={1.75}
+          />
         </TouchableOpacity>
 
-        {/* 좌측 상단 AI 검토 가능 배지 */}
-        <View style={styles.aiBadge}>
-          <Text style={styles.aiBadgeText}>AI 검토 가능 ✨</Text>
-        </View>
-
-        {/* 좌측 하단 상태 등급 배지 */}
-        <View style={[styles.gradeBadge, { backgroundColor: getConditionColor() }]}>
-          <Text style={styles.gradeBadgeText}>상태 {space.conditionGrade}급</Text>
+        {/* 좌측 상단 상태/진단 배지 */}
+        <View style={styles.badgeRow}>
+          <View style={styles.badgeItem}>
+            <RiskBadge 
+              level={getRiskLevel()} 
+              label={`${space.conditionGrade}급`}
+              size="sm"
+            />
+          </View>
         </View>
       </View>
 
       {/* 매물 정보 */}
       <View style={styles.infoContainer}>
-        {/* 임대료 및 조건 (직방 스타일 볼드) */}
+        {/* 가격 정보: 가장 크고 굵게, tabular-nums */}
         <View style={styles.priceRow}>
           <Text style={styles.priceText}>{formatRent()}</Text>
           <Text style={styles.typeText}>{space.typeLabel}</Text>
         </View>
 
-        {/* 타이틀 */}
+        {/* 매물 제목: Noto Serif KR */}
         <Text style={styles.titleText} numberOfLines={1}>
           {space.title}
         </Text>
@@ -97,12 +98,12 @@ export const SpaceCard: React.FC<SpaceCardProps> = ({
         <View style={styles.tagRow}>
           {space.tags.slice(0, 3).map((tag, idx) => (
             <View key={idx} style={styles.tagChip}>
-              <Text style={styles.tagText}>#{tag}</Text>
+              <Text style={styles.tagText}>{tag}</Text>
             </View>
           ))}
         </View>
 
-        {/* 하단 빠른 액션 (가로 스크롤 아닐 때) */}
+        {/* 하단 계약 전 진단 바로가기 버튼 */}
         {!horizontal && (
           <TouchableOpacity
             style={styles.quickAiBtn}
@@ -112,7 +113,7 @@ export const SpaceCard: React.FC<SpaceCardProps> = ({
             }}
             activeOpacity={0.8}
           >
-            <Text style={styles.quickAiBtnText}>⚡ 이 공간 AI 리포트 바로 보기</Text>
+            <Text style={styles.quickAiBtnText}>계약 전 진단 리포트 확인</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -123,29 +124,24 @@ export const SpaceCard: React.FC<SpaceCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: COLORS.surface,
-    borderRadius: 16,
+    borderRadius: METRICS.borderRadiusMd,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#EEEEEE",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    borderColor: COLORS.line,
   },
   cardVertical: {
-    marginBottom: 16,
+    marginBottom: 14,
     width: "100%",
   },
   cardHorizontal: {
     width: 250,
-    marginRight: 14,
+    marginRight: 12,
   },
   imageContainer: {
     width: "100%",
     height: 160,
     position: "relative",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
   },
   imageContainerHorizontal: {
     height: 135,
@@ -156,48 +152,23 @@ const styles = StyleSheet.create({
   },
   bookmarkButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    top: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: METRICS.borderRadiusFull,
+    backgroundColor: "rgba(42, 42, 40, 0.45)",
     alignItems: "center",
     justifyContent: "center",
   },
-  bookmarkHeart: {
-    fontSize: 16,
-  },
-  aiBadge: {
+  badgeRow: {
     position: "absolute",
-    top: 10,
-    left: 10,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    top: 8,
+    left: 8,
+    flexDirection: "row",
   },
-  aiBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    fontWeight: "700",
-  },
-  gradeBadge: {
-    position: "absolute",
-    bottom: 10,
-    left: 10,
-    paddingVertical: 3,
-    paddingHorizontal: 7,
-    borderRadius: 4,
-  },
-  gradeBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 10,
-    fontWeight: "800",
+  badgeItem: {
+    marginRight: 4,
   },
   infoContainer: {
     padding: 14,
@@ -209,24 +180,29 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   priceText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 18,
     fontWeight: "800",
-    color: COLORS.textPrimary,
+    color: COLORS.primary,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
     letterSpacing: -0.3,
   },
   typeText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "600",
-    color: COLORS.primary,
+    color: COLORS.textSecondary,
   },
   titleText: {
-    fontSize: 14,
-    fontWeight: "600",
+    fontFamily: TYPOGRAPHY.titleFont,
+    fontSize: 15,
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 4,
     letterSpacing: -0.2,
   },
   metaText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     color: COLORS.textSecondary,
     marginBottom: 8,
@@ -237,29 +213,33 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   tagChip: {
-    backgroundColor: "#F4F6F8",
-    paddingVertical: 3,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingVertical: 2,
     paddingHorizontal: 6,
-    borderRadius: 4,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 6,
     marginBottom: 4,
   },
   tagText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
-    color: "#555555",
+    color: COLORS.textSecondary,
   },
   quickAiBtn: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.surface,
     paddingVertical: 8,
-    borderRadius: 8,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
     marginTop: 6,
     borderWidth: 1,
-    borderColor: "#D6DCFF",
+    borderColor: COLORS.line,
   },
   quickAiBtnText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.textPrimary,
   },
 });

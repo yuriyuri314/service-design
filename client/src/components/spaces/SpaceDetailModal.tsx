@@ -7,10 +7,10 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Modal, 
-  Dimensions, 
   Platform 
 } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { X, Heart, MapPin, Check } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { Space } from "../../types";
 import { useApp } from "../../context/AppContext";
 import { HighlightBox } from "../common/HighlightBox";
@@ -53,7 +53,7 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
         {/* 상단 닫기 및 찜 헤더 */}
         <View style={styles.topHeader}>
           <TouchableOpacity onPress={onClose} style={styles.iconBtn} activeOpacity={0.7}>
-            <Text style={styles.closeIcon}>✕</Text>
+            <X size={20} color={COLORS.textPrimary} strokeWidth={1.75} />
           </TouchableOpacity>
           <Text style={styles.headerTitle} numberOfLines={1}>{space.title}</Text>
           <TouchableOpacity 
@@ -61,7 +61,12 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
             style={styles.iconBtn}
             activeOpacity={0.7}
           >
-            <Text style={styles.headerHeart}>{bookmarked ? "❤️" : "🤍"}</Text>
+            <Heart 
+              size={20} 
+              color={bookmarked ? COLORS.accent : COLORS.textPrimary} 
+              fill={bookmarked ? COLORS.accent : "none"}
+              strokeWidth={1.75}
+            />
           </TouchableOpacity>
         </View>
 
@@ -99,12 +104,16 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
           <View style={styles.contentPadding}>
             {/* 배지 행 */}
             <View style={styles.badgeRow}>
-              <View style={styles.aiBadge}>
-                <Text style={styles.aiBadgeText}>AI 검토 지원 매물 ✨</Text>
+              <View style={styles.statusBadge}>
+                <RiskBadge 
+                  level={getRiskLevel()} 
+                  label={`보존상태 ${space.conditionGrade}급 (${space.conditionLabel})`}
+                  size="sm"
+                />
               </View>
               {space.canOwnerDiscuss && (
                 <View style={styles.discussBadge}>
-                  <Text style={styles.discussBadgeText}>소유자 협의 가능 🤝</Text>
+                  <Text style={styles.discussBadgeText}>소유자 협의 가능</Text>
                 </View>
               )}
             </View>
@@ -112,7 +121,10 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
             {/* 가격 정보 */}
             <Text style={styles.priceHeading}>{formatRent()}</Text>
             <Text style={styles.titleHeading}>{space.title}</Text>
-            <Text style={styles.addressText}>📍 {space.address}</Text>
+            <View style={styles.addressRow}>
+              <MapPin size={14} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginRight: 4 }} />
+              <Text style={styles.addressText}>{space.address}</Text>
+            </View>
 
             {/* 핵심 스펙 그리드 */}
             <View style={styles.specGrid}>
@@ -126,37 +138,31 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
               </View>
               <View style={styles.specItem}>
                 <Text style={styles.specLabel}>보존상태</Text>
-                <View style={styles.specGradeRow}>
-                  <RiskBadge 
-                    level={getRiskLevel()} 
-                    label={`${space.conditionGrade}급 (${space.conditionLabel})`}
-                    size="sm"
-                  />
-                </View>
+                <Text style={styles.specValue}>{space.conditionGrade}급 ({space.conditionLabel})</Text>
               </View>
               <View style={styles.specItem}>
                 <Text style={styles.specLabel}>예상 수리비</Text>
                 <Text style={styles.specValueHighlight}>
-                  {space.estimatedRepairCost || "AI 리포트 참조"}
+                  {space.estimatedRepairCost || "진단 리포트 참조"}
                 </Text>
               </View>
             </View>
 
-            {/* 소유자의 말 (강조 박스: 점선 테두리 + 둥근 모서리 스타일) */}
+            {/* 소유자 안내 (HighlightBox) */}
             <HighlightBox
               title={`소유자 ${space.ownerName}의 안내`}
-              icon={<Text>📢</Text>}
             >
               {space.description}
             </HighlightBox>
 
             {/* 추천 창업 업종 */}
             <View style={styles.sectionBlock}>
-              <Text style={styles.sectionTitle}>💡 이 공간 추천 창업 업종</Text>
+              <Text style={styles.sectionTitle}>추천 창업 업종</Text>
               <View style={styles.recommendedUsesRow}>
                 {space.recommendedUses.map((use, idx) => (
                   <View key={idx} style={styles.useChip}>
-                    <Text style={styles.useChipText}>✓ {use}</Text>
+                    <Check size={13} color={COLORS.primary} strokeWidth={2} style={{ marginRight: 4 }} />
+                    <Text style={styles.useChipText}>{use}</Text>
                   </View>
                 ))}
               </View>
@@ -164,22 +170,22 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
 
             {/* 주변 시설 & 관광지 접근성 */}
             <View style={styles.sectionBlock}>
-              <Text style={styles.sectionTitle}>🚶 주변 편의시설 및 접근성</Text>
+              <Text style={styles.sectionTitle}>주변 편의시설 및 접근성</Text>
               {space.nearbyAmenities.map((amenity, idx) => (
                 <View key={idx} style={styles.amenityRow}>
-                  <Text style={styles.amenityName}>• {amenity.name}</Text>
+                  <Text style={styles.amenityName}>{amenity.name}</Text>
                   <Text style={styles.amenityDist}>{amenity.distance}</Text>
                 </View>
               ))}
             </View>
 
-            {/* 판단 근거 안내 배너 */}
+            {/* 계약 전 확인 안내 */}
             <View style={styles.reasonCard}>
-              <Text style={styles.reasonTitle}>💡 계약 전 꼭 확인하세요!</Text>
+              <Text style={styles.reasonTitle}>계약 전 점검 안내</Text>
               <Text style={styles.reasonText}>
                 임대차 계약서 작성 전에 태백시 지원사업과 연계 가능한지,
-                숨은 수리비(배관/전기/단열)가 얼마나 발생하는지 
-                <Text style={styles.boldText}> AI 창업 검토 리포트</Text>로 먼저 확인해 보세요.
+                배관·전기·단열 등 숨은 수리비가 얼마나 발생하는지 
+                진단 리포트를 먼저 확인해 보세요.
               </Text>
             </View>
 
@@ -187,14 +193,19 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
           </View>
         </ScrollView>
 
-        {/* 하단 고정 CTA 바 (직방 스타일) */}
+        {/* 하단 고정 CTA 바 */}
         <View style={styles.bottomCtaBar}>
           <TouchableOpacity
             style={styles.ctaBookmarkBtn}
             onPress={() => toggleBookmark(space.id)}
             activeOpacity={0.8}
           >
-            <Text style={styles.ctaHeart}>{bookmarked ? "❤️" : "🤍"}</Text>
+            <Heart 
+              size={20} 
+              color={bookmarked ? COLORS.accent : COLORS.textPrimary} 
+              fill={bookmarked ? COLORS.accent : "none"}
+              strokeWidth={1.75}
+            />
             <Text style={styles.ctaHeartText}>찜</Text>
           </TouchableOpacity>
 
@@ -217,7 +228,7 @@ export const SpaceDetailModal: React.FC<SpaceDetailModalProps> = ({
             }}
             activeOpacity={0.85}
           >
-            <Text style={styles.ctaMainBtnText}>✨ 이 공간 AI로 검토하기</Text>
+            <Text style={styles.ctaMainBtnText}>계약 전 진단 리포트 확인</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -237,11 +248,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#F3F4F6",
+    borderBottomColor: COLORS.line,
     backgroundColor: COLORS.surface,
   },
   headerTitle: {
     flex: 1,
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 15,
     fontWeight: "700",
     color: COLORS.textPrimary,
@@ -254,21 +266,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  closeIcon: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: COLORS.textPrimary,
-  },
-  headerHeart: {
-    fontSize: 18,
-  },
   scrollBody: {
     flex: 1,
   },
   carouselContainer: {
     width: "100%",
     height: 240,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: COLORS.background,
     position: "relative",
   },
   carouselImage: {
@@ -282,118 +286,123 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   dot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
     marginHorizontal: 3,
   },
   dotActive: {
-    backgroundColor: "#FFFFFF",
-    width: 16,
+    backgroundColor: COLORS.surface,
+    width: 14,
   },
   imageCounter: {
     position: "absolute",
     bottom: 12,
     right: 14,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 12,
+    backgroundColor: "rgba(42, 42, 40, 0.7)",
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    borderRadius: METRICS.borderRadiusSm,
   },
   imageCounterText: {
-    color: "#FFFFFF",
+    fontFamily: TYPOGRAPHY.bodyFont,
+    color: COLORS.surface,
     fontSize: 11,
     fontWeight: "600",
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   contentPadding: {
-    padding: 18,
+    padding: 16,
   },
   badgeRow: {
     flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
   },
-  aiBadge: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-    marginRight: 8,
-  },
-  aiBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    fontWeight: "700",
+  statusBadge: {
+    marginRight: 6,
   },
   discussBadge: {
-    backgroundColor: COLORS.primaryLight,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 6,
+    backgroundColor: COLORS.background,
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#D6DCFF",
+    borderColor: COLORS.line,
   },
   discussBadgeText: {
-    color: COLORS.primary,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    color: COLORS.textSecondary,
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "600",
   },
   priceHeading: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 22,
     fontWeight: "800",
-    color: COLORS.textPrimary,
+    color: COLORS.primary,
     marginBottom: 4,
     letterSpacing: -0.4,
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   titleHeading: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "700",
     color: COLORS.textPrimary,
-    lineHeight: 22,
+    lineHeight: 23,
     marginBottom: 6,
   },
+  addressRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+  },
   addressText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     color: COLORS.textSecondary,
-    marginBottom: 16,
   },
   specGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    backgroundColor: "#F8FAFC",
-    borderRadius: 14,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 12,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#EEF2F6",
+    borderColor: COLORS.line,
   },
   specItem: {
     width: "50%",
-    paddingVertical: 8,
-    paddingHorizontal: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
   },
   specLabel: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
-    color: COLORS.textTertiary,
-    marginBottom: 3,
+    color: COLORS.textSecondary,
+    marginBottom: 2,
   },
   specValue: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
-  },
-  specGradeRow: {
-    flexDirection: "row",
+    fontVariant: TYPOGRAPHY.fontVariantTabular,
   },
   specValueHighlight: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
   },
   sectionBlock: {
     marginTop: 18,
   },
   sectionTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
@@ -404,14 +413,19 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   useChip: {
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    marginRight: 8,
-    marginBottom: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.background,
+    paddingVertical: 5,
+    paddingHorizontal: 9,
+    borderRadius: METRICS.borderRadiusSm,
+    marginRight: 6,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   useChipText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "600",
     color: COLORS.textPrimary,
@@ -421,103 +435,96 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 6,
     borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
+    borderBottomColor: COLORS.line,
   },
   amenityName: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     color: COLORS.textPrimary,
   },
   amenityDist: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     fontWeight: "600",
-    color: COLORS.primary,
+    color: COLORS.textSecondary,
   },
   reasonCard: {
-    backgroundColor: "#FFFBEB",
-    borderColor: "#FDE68A",
+    backgroundColor: COLORS.surface,
+    borderColor: COLORS.line,
     borderWidth: 1,
-    borderRadius: 14,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 14,
     marginTop: 18,
   },
   reasonTitle: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
-    color: "#B45309",
+    color: COLORS.textPrimary,
     marginBottom: 4,
   },
   reasonText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
-    color: "#78350F",
+    color: COLORS.textSecondary,
     lineHeight: 18,
-  },
-  boldText: {
-    fontWeight: "700",
-    color: COLORS.primary,
   },
   bottomCtaBar: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: 74,
+    height: 70,
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: "#EEEEEE",
+    borderTopColor: COLORS.line,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingBottom: Platform.OS === "ios" ? 14 : 6,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 8,
   },
   ctaBookmarkBtn: {
-    width: 48,
+    width: 44,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 8,
-  },
-  ctaHeart: {
-    fontSize: 20,
+    marginRight: 6,
   },
   ctaHeartText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 10,
     fontWeight: "600",
     color: COLORS.textSecondary,
     marginTop: 1,
   },
   ctaChatBtn: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 8,
   },
   ctaChatBtnText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
     color: COLORS.textPrimary,
   },
   ctaMainBtn: {
     flex: 1,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 13,
-    borderRadius: 12,
+    backgroundColor: COLORS.accent,
+    paddingVertical: 12,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.35,
-    shadowRadius: 5,
-    elevation: 4,
   },
   ctaMainBtnText: {
-    color: "#FFFFFF",
+    fontFamily: TYPOGRAPHY.bodyFont,
+    color: COLORS.surface,
     fontSize: 14,
     fontWeight: "800",
-    letterSpacing: -0.2,
   },
 });

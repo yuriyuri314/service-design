@@ -6,11 +6,21 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Image, 
-  TextInput,
-  Modal,
-  Platform 
+  TextInput, 
+  Modal 
 } from "react-native";
-import { COLORS } from "../constants/theme";
+import { 
+  Calendar, 
+  Shield, 
+  Building2, 
+  FileText, 
+  Send, 
+  Check, 
+  Info, 
+  ChevronRight,
+  Handshake 
+} from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Header } from "../components/common/Header";
 import { ChatRoom, ChatMessage } from "../types";
@@ -69,7 +79,7 @@ export const ChatScreen: React.FC = () => {
         senderId: "owner-auto",
         senderName: activeRoom.ownerName,
         senderRole: "OWNER",
-        text: "네 청년 대표님, 보내주신 내용 잘 확인했습니다. 정성껏 준비해주셔서 믿음이 가네요! 현장에서 뵙고 자세한 이야기 나누겠습니다.",
+        text: "네 대표님, 보내주신 내용 잘 확인했습니다. 정성껏 준비해주셔서 믿음이 가네요. 현장에서 뵙고 자세한 이야기 나누겠습니다.",
         timestamp: "방금 전",
       };
       setMessages(prev => [...prev, replyMsg]);
@@ -80,7 +90,7 @@ export const ChatScreen: React.FC = () => {
   const handleConfirmSchedule = () => {
     setIsScheduleModalVisible(false);
     handleSendMessage(
-      `📅 [현장 방문 확정] 소유자님과 ${selectedDate}에 현장 방문 미팅 일정을 잡았습니다. 현장에서 뵙겠습니다!`
+      `[현장 방문 확정] 소유자님과 ${selectedDate}에 현장 방문 미팅 일정을 잡았습니다. 현장에서 뵙겠습니다.`
     );
   };
 
@@ -93,7 +103,7 @@ export const ChatScreen: React.FC = () => {
       senderId: "officer-01",
       senderName: "이수진 매니저 (태백시 청년창창센터)",
       senderRole: "OFFICER",
-      text: "🏛️ 안녕하세요! 태백시 청년창창센터 공간매칭 전담 매니저입니다. 청년 창업가와 소유자님의 안심 계약을 위해 현장 방문 시 시설 점검 및 시 보조금(최대 4,500만원) 지원 서류 검토를 동행 지원하겠습니다.",
+      text: "안녕하세요. 태백시 청년창창센터 공간매칭 전담 매니저입니다. 청년 창업가와 소유자님의 안심 계약을 위해 현장 방문 시 시설 점검 및 시 보조금(최대 4,500만원) 지원 서류 검토를 동행 지원하겠습니다.",
       timestamp: "방금 전",
     };
     setMessages(prev => [...prev, officerMsg]);
@@ -106,9 +116,12 @@ export const ChatScreen: React.FC = () => {
         <Header title="소유자 협의 목록" />
         <ScrollView style={styles.scrollBody} showsVerticalScrollIndicator={false}>
           <View style={styles.listIntro}>
-            <Text style={styles.listIntroTitle}>🤝 믿고 맡길 수 있는 연결</Text>
+            <View style={styles.listIntroHeader}>
+              <Handshake size={18} color={COLORS.accent} strokeWidth={1.75} style={{ marginRight: 6 }} />
+              <Text style={styles.listIntroTitle}>믿고 맡길 수 있는 연결</Text>
+            </View>
             <Text style={styles.listIntroDesc}>
-              AI 검토 리포트와 청년 프로필로 소유자와 협의하고, 청년창창센터가 함께합니다.
+              진단 리포트와 청년 프로필로 소유자와 협의하고, 청년창창센터가 함께합니다.
             </Text>
           </View>
 
@@ -164,12 +177,16 @@ export const ChatScreen: React.FC = () => {
                     isPassed && styles.stageDotPassed,
                     isCurrent && styles.stageDotCurrent,
                   ]}>
-                    <Text style={[
-                      styles.stageDotText,
-                      (isPassed || isCurrent) && styles.stageDotTextActive,
-                    ]}>
-                      {isPassed ? "✓" : idx + 1}
-                    </Text>
+                    {isPassed ? (
+                      <Check size={12} color="#FFFFFF" strokeWidth={2} />
+                    ) : (
+                      <Text style={[
+                        styles.stageDotText,
+                        isCurrent && styles.stageDotTextActive,
+                      ]}>
+                        {idx + 1}
+                      </Text>
+                    )}
                   </View>
                   <Text style={[
                     styles.stageText,
@@ -192,8 +209,9 @@ export const ChatScreen: React.FC = () => {
         {/* 동행 배너 */}
         {officerInvited && (
           <View style={styles.officerBadgeBanner}>
+            <Shield size={14} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
             <Text style={styles.officerBadgeText}>
-              🛡️ <Text style={{ fontWeight: "800" }}>태백시 청년창창센터</Text> 전담 매니저 동행 중
+              <Text style={{ fontWeight: "700" }}>태백시 청년창창센터</Text> 전담 매니저 동행 중
             </Text>
           </View>
         )}
@@ -233,10 +251,13 @@ export const ChatScreen: React.FC = () => {
                   {msg.text}
                 </Text>
 
-                {/* 첫 메시지 자동 첨부: AI 검토 리포트 카드 */}
+                {/* 첫 메시지 자동 첨부: 진단 리포트 카드 */}
                 {msg.attachmentType === "REPORT" && (
                   <View style={styles.reportAttachmentCard}>
-                    <Text style={styles.attachCardHeader}>📊 AI 창업 검토 리포트 첨부됨</Text>
+                    <View style={styles.attachCardHeaderRow}>
+                      <FileText size={15} color={COLORS.accent} strokeWidth={1.75} style={{ marginRight: 5 }} />
+                      <Text style={styles.attachCardHeader}>진단 리포트 첨부됨</Text>
+                    </View>
                     <Text style={styles.attachItem}>• 종합 적합도: 88점 (우수)</Text>
                     <Text style={styles.attachItem}>• 진단 요약: 골조 양호, 배관/전기 승압 필요</Text>
                     <Text style={styles.attachItem}>• 예상 수리비: 약 1,450만원</Text>
@@ -244,7 +265,8 @@ export const ChatScreen: React.FC = () => {
                       style={styles.viewReportBtn}
                       onPress={() => setActiveTab("AI_REVIEW")}
                     >
-                      <Text style={styles.viewReportBtnText}>리포트 전체 보기 →</Text>
+                      <Text style={styles.viewReportBtnText}>리포트 전체 보기</Text>
+                      <ChevronRight size={14} color={COLORS.primary} strokeWidth={1.75} />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -252,7 +274,7 @@ export const ChatScreen: React.FC = () => {
                 {/* 첫 메시지 자동 첨부: 청년 창업 프로필 카드 */}
                 {msg.attachmentType === "PROFILE" && (
                   <View style={styles.profileAttachmentCard}>
-                    <Text style={styles.attachCardHeader}>🌱 청년 창업가 운영 약속 프로필</Text>
+                    <Text style={styles.attachCardHeader}>청년 창업가 운영 약속 프로필</Text>
                     <Text style={styles.attachItem}>• 창업가: 박도현 (28세 / F&B 경력 4년)</Text>
                     <Text style={styles.attachItem}>• 창업 업종: 탄광 문화 수제맥주 브루펍</Text>
                     <Text style={styles.attachItem}>• 약속 조건: 최소 3년 이상 장기 운영 보장</Text>
@@ -267,14 +289,15 @@ export const ChatScreen: React.FC = () => {
         })}
       </ScrollView>
 
-      {/* 퀵 액션 버튼 바 (현장 방문 일정 잡기 / 담당자 초대) */}
+      {/* 퀵 액션 버튼 바 (현장 방문 일정 잡기 / 담당자 동행) */}
       <View style={styles.actionToolBar}>
         <TouchableOpacity 
           style={styles.scheduleActionBtn}
           onPress={() => setIsScheduleModalVisible(true)}
           activeOpacity={0.8}
         >
-          <Text style={styles.scheduleActionText}>📅 현장 방문 일정 잡기</Text>
+          <Calendar size={14} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 5 }} />
+          <Text style={styles.scheduleActionText}>현장 방문 일정 잡기</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -283,8 +306,9 @@ export const ChatScreen: React.FC = () => {
           disabled={officerInvited}
           activeOpacity={0.8}
         >
+          <Building2 size={14} color={COLORS.textSecondary} strokeWidth={1.75} style={{ marginRight: 5 }} />
           <Text style={styles.officerActionText}>
-            {officerInvited ? "🏛️ 담당자 동행 참여 중" : "🏛️ 청년창창센터 담당자 초대"}
+            {officerInvited ? "담당자 동행 참여 중" : "청년창창센터 담당자 동행 요청"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -293,8 +317,8 @@ export const ChatScreen: React.FC = () => {
       <View style={styles.chatInputBar}>
         <TextInput
           style={styles.chatTextInput}
-          placeholder="소유자님께 궁금한 점이나 의견을 남겨보세요..."
-          placeholderTextColor="#9CA3AF"
+          placeholder="소유자님께 궁금한 점이나 의견을 남겨보세요."
+          placeholderTextColor={COLORS.textSecondary}
           value={inputText}
           onChangeText={setInputText}
           onSubmitEditing={() => handleSendMessage()}
@@ -304,7 +328,7 @@ export const ChatScreen: React.FC = () => {
           onPress={() => handleSendMessage()}
           activeOpacity={0.85}
         >
-          <Text style={styles.chatSendBtnText}>전송</Text>
+          <Send size={15} color="#FFFFFF" strokeWidth={1.75} />
         </TouchableOpacity>
       </View>
 
@@ -317,7 +341,7 @@ export const ChatScreen: React.FC = () => {
       >
         <View style={styles.modalBackdrop}>
           <View style={styles.scheduleModalBox}>
-            <Text style={styles.modalTitle}>📅 현장 방문 일정 선택</Text>
+            <Text style={styles.modalTitle}>현장 방문 일정 선택</Text>
             <Text style={styles.modalSub}>소유자님과 함께 공간을 직접 살펴볼 일정을 선택하세요.</Text>
 
             <View style={styles.dateOptionList}>
@@ -332,15 +356,16 @@ export const ChatScreen: React.FC = () => {
                     <Text style={[styles.dateOptionText, isSelected && styles.dateOptionTextSelected]}>
                       {dateStr}
                     </Text>
-                    {isSelected && <Text style={styles.checkIcon}>✓</Text>}
+                    {isSelected && <Check size={16} color={COLORS.accent} strokeWidth={2} />}
                   </TouchableOpacity>
                 );
               })}
             </View>
 
             <View style={styles.modalNoticeBox}>
+              <Info size={14} color={COLORS.primary} strokeWidth={1.75} style={{ marginRight: 6 }} />
               <Text style={styles.modalNoticeText}>
-                💡 청년창창센터 담당자도 일정에 맞춰 현장에 함께 방문합니다.
+                청년창창센터 담당자도 일정에 맞춰 현장에 함께 방문합니다.
               </Text>
             </View>
 
@@ -377,37 +402,47 @@ const styles = StyleSheet.create({
   listIntro: {
     backgroundColor: COLORS.surface,
     padding: 16,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
+  },
+  listIntroHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
   },
   listIntroTitle: {
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
-    marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   listIntroDesc: {
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.textSecondary,
     lineHeight: 18,
+    fontFamily: TYPOGRAPHY.bodyFont,
   },
   roomCard: {
     flexDirection: "row",
     backgroundColor: COLORS.surface,
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     alignItems: "center",
   },
   roomCardThumb: {
     width: 64,
     height: 64,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     marginRight: 12,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   roomCardContent: {
     flex: 1,
@@ -422,12 +457,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     color: COLORS.textPrimary,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   roomCardStatusPill: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     paddingVertical: 2,
     paddingHorizontal: 6,
-    borderRadius: 4,
+    borderRadius: METRICS.borderRadiusSm,
   },
   roomCardStatusText: {
     color: COLORS.primary,
@@ -445,15 +483,16 @@ const styles = StyleSheet.create({
   },
   roomCardTime: {
     fontSize: 10,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginLeft: 6,
+    fontVariant: ["tabular-nums"],
   },
   stepStatusBar: {
     backgroundColor: COLORS.surface,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
+    borderBottomColor: COLORS.line,
   },
   stepProgressRow: {
     flexDirection: "row",
@@ -464,57 +503,66 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   stageDot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#E5E7EB",
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
     alignItems: "center",
     justifyContent: "center",
   },
   stageDotPassed: {
-    backgroundColor: COLORS.primarySoft,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   stageDotCurrent: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.accent,
+    borderColor: COLORS.accent,
   },
   stageDotText: {
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textSecondary,
+    fontVariant: ["tabular-nums"],
   },
   stageDotTextActive: {
     color: "#FFFFFF",
   },
   stageText: {
-    fontSize: 9,
-    color: COLORS.textTertiary,
+    fontSize: 10,
+    color: COLORS.textSecondary,
     marginTop: 3,
   },
   stageTextCurrent: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   stageBarLine: {
     flex: 1,
-    height: 2,
-    backgroundColor: "#E5E7EB",
+    height: 1,
+    backgroundColor: COLORS.line,
     marginHorizontal: 3,
-    marginBottom: 12,
+    marginBottom: 14,
   },
   stageBarLinePassed: {
     backgroundColor: COLORS.primary,
   },
   officerBadgeBanner: {
-    backgroundColor: "#EFF6FF",
-    borderRadius: 6,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginTop: 8,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   officerBadgeText: {
     fontSize: 11,
-    color: "#1D4ED8",
+    color: COLORS.textPrimary,
   },
   chatScroll: {
     flex: 1,
@@ -544,7 +592,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   speechBubble: {
-    borderRadius: 14,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 12,
   },
   speechBubbleMe: {
@@ -552,15 +600,16 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 2,
   },
   speechBubbleOther: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: COLORS.line,
     borderBottomLeftRadius: 2,
   },
   speechBubbleOfficer: {
-    backgroundColor: "#F0FDF4",
+    backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: "#BBF7D0",
+    borderColor: COLORS.riskSafe,
+    borderLeftWidth: 3,
   },
   msgText: {
     fontSize: 13,
@@ -572,48 +621,61 @@ const styles = StyleSheet.create({
   },
   msgTime: {
     fontSize: 10,
-    color: COLORS.textTertiary,
+    color: COLORS.textSecondary,
     marginTop: 4,
     alignSelf: "flex-end",
+    fontVariant: ["tabular-nums"],
   },
   reportAttachmentCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: COLORS.line,
+  },
+  attachCardHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
   },
   profileAttachmentCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: COLORS.line,
   },
   attachCardHeader: {
     fontSize: 12,
-    fontWeight: "800",
-    color: COLORS.primary,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
     marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   attachItem: {
     fontSize: 11,
-    color: "#374151",
+    color: COLORS.textSecondary,
     lineHeight: 16,
   },
   viewReportBtn: {
-    backgroundColor: COLORS.primaryLight,
+    backgroundColor: COLORS.surface,
     paddingVertical: 5,
-    borderRadius: 6,
+    paddingHorizontal: 8,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginTop: 6,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   viewReportBtnText: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "600",
     color: COLORS.primary,
+    marginRight: 4,
   },
   actionToolBar: {
     flexDirection: "row",
@@ -621,17 +683,19 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: "#F1F5F9",
+    borderTopColor: COLORS.line,
     gap: 8,
   },
   scheduleActionBtn: {
     flex: 1,
-    backgroundColor: COLORS.primaryLight,
-    paddingVertical: 8,
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    paddingVertical: 9,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
-    borderColor: "#D6DCFF",
+    borderColor: COLORS.line,
   },
   scheduleActionText: {
     fontSize: 11,
@@ -640,17 +704,21 @@ const styles = StyleSheet.create({
   },
   officerActionBtn: {
     flex: 1,
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 8,
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    paddingVertical: 9,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   officerActionBtnDisabled: {
     opacity: 0.6,
   },
   officerActionText: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "600",
     color: COLORS.textSecondary,
   },
   chatInputBar: {
@@ -660,28 +728,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: COLORS.line,
   },
   chatTextInput: {
     flex: 1,
-    height: 40,
-    backgroundColor: "#F3F4F6",
-    borderRadius: 20,
-    paddingHorizontal: 14,
+    height: 38,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
+    paddingHorizontal: 12,
     fontSize: 13,
     color: COLORS.textPrimary,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   chatSendBtn: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 20,
+    width: 38,
+    height: 38,
+    borderRadius: METRICS.borderRadiusSm,
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: 8,
-  },
-  chatSendBtnText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "700",
   },
   modalBackdrop: {
     flex: 1,
@@ -692,15 +759,18 @@ const styles = StyleSheet.create({
   },
   scheduleModalBox: {
     width: "100%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: METRICS.borderRadiusMd,
     padding: 20,
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   modalTitle: {
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "700",
     color: COLORS.textPrimary,
     marginBottom: 4,
+    fontFamily: TYPOGRAPHY.titleFont,
   },
   modalSub: {
     fontSize: 12,
@@ -716,37 +786,40 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    backgroundColor: "#F8FAFC",
+    borderColor: COLORS.line,
+    backgroundColor: COLORS.background,
   },
   dateOptionSelected: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.accent,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
   },
   dateOptionText: {
     fontSize: 13,
     fontWeight: "600",
     color: COLORS.textPrimary,
+    fontVariant: ["tabular-nums"],
   },
   dateOptionTextSelected: {
-    color: COLORS.primary,
-    fontWeight: "800",
-  },
-  checkIcon: {
-    color: COLORS.primary,
-    fontWeight: "800",
+    color: COLORS.textPrimary,
+    fontWeight: "700",
   },
   modalNoticeBox: {
-    backgroundColor: "#EFF6FF",
-    borderRadius: 8,
+    backgroundColor: COLORS.background,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 10,
     marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   modalNoticeText: {
     fontSize: 11,
-    color: "#1E40AF",
+    color: COLORS.textSecondary,
+    flex: 1,
   },
   modalBtnRow: {
     flexDirection: "row",
@@ -754,10 +827,12 @@ const styles = StyleSheet.create({
   },
   modalCancelBtn: {
     flex: 1,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: COLORS.background,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.line,
   },
   modalCancelText: {
     fontSize: 13,
@@ -768,12 +843,12 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: COLORS.primary,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: METRICS.borderRadiusSm,
     alignItems: "center",
   },
   modalConfirmText: {
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: "700",
     color: "#FFFFFF",
   },
 });

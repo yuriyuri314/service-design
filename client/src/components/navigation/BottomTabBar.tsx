@@ -1,6 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { 
+  Home, 
+  MapPin, 
+  FileCheck2, 
+  MessageSquare, 
+  Briefcase, 
+  Building2, 
+  Inbox, 
+  User 
+} from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 import { useApp } from "../../context/AppContext";
 import { MainTab, OwnerTab } from "../../types";
 
@@ -8,17 +18,18 @@ export const BottomTabBar: React.FC = () => {
   const { role, activeTab, setActiveTab, ownerActiveTab, setOwnerActiveTab } = useApp();
 
   if (role === "OWNER") {
-    const ownerTabs: { key: OwnerTab; label: string; icon: string }[] = [
-      { key: "HOME", label: "홈", icon: "🏠" },
-      { key: "MY_SPACE", label: "내 공간", icon: "🏢" },
-      { key: "REQUESTS", label: "협의 요청", icon: "📬" },
-      { key: "MY_PAGE", label: "마이", icon: "👤" },
+    const ownerTabs: { key: OwnerTab; label: string; Icon: any }[] = [
+      { key: "HOME", label: "홈", Icon: Home },
+      { key: "MY_SPACE", label: "내 공간", Icon: Building2 },
+      { key: "REQUESTS", label: "협의 요청", Icon: Inbox },
+      { key: "MY_PAGE", label: "마이", Icon: User },
     ];
 
     return (
       <View style={styles.container}>
         {ownerTabs.map((tab) => {
           const isActive = ownerActiveTab === tab.key;
+          const IconComponent = tab.Icon;
           return (
             <TouchableOpacity
               key={tab.key}
@@ -26,11 +37,14 @@ export const BottomTabBar: React.FC = () => {
               onPress={() => setOwnerActiveTab(tab.key)}
               activeOpacity={0.7}
             >
-              <Text style={styles.tabIcon}>{tab.icon}</Text>
+              <IconComponent 
+                size={20} 
+                color={isActive ? COLORS.accent : COLORS.textSecondary} 
+                strokeWidth={1.75} 
+              />
               <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
                 {tab.label}
               </Text>
-              {isActive && <View style={styles.activeIndicator} />}
             </TouchableOpacity>
           );
         })}
@@ -47,7 +61,11 @@ export const BottomTabBar: React.FC = () => {
         onPress={() => setActiveTab("HOME")}
         activeOpacity={0.7}
       >
-        <Text style={styles.tabIcon}>🏠</Text>
+        <Home 
+          size={20} 
+          color={activeTab === "HOME" ? COLORS.accent : COLORS.textSecondary} 
+          strokeWidth={1.75} 
+        />
         <Text style={[styles.tabLabel, activeTab === "HOME" && styles.tabLabelActive]}>
           홈
         </Text>
@@ -59,13 +77,17 @@ export const BottomTabBar: React.FC = () => {
         onPress={() => setActiveTab("EXPLORE")}
         activeOpacity={0.7}
       >
-        <Text style={styles.tabIcon}>🗺️</Text>
+        <MapPin 
+          size={20} 
+          color={activeTab === "EXPLORE" ? COLORS.accent : COLORS.textSecondary} 
+          strokeWidth={1.75} 
+        />
         <Text style={[styles.tabLabel, activeTab === "EXPLORE" && styles.tabLabelActive]}>
           공간 찾기
         </Text>
       </TouchableOpacity>
 
-      {/* 3. AI 검토 (가운데 강조 버튼) */}
+      {/* 3. 진단 (가운데 강조 버튼) */}
       <View style={styles.centerTabContainer}>
         <TouchableOpacity
           style={[
@@ -75,10 +97,8 @@ export const BottomTabBar: React.FC = () => {
           onPress={() => setActiveTab("AI_REVIEW")}
           activeOpacity={0.85}
         >
-          <View style={styles.centerIconWrapper}>
-            <Text style={styles.centerIcon}>✨</Text>
-          </View>
-          <Text style={styles.centerButtonText}>AI 검토</Text>
+          <FileCheck2 size={20} color={COLORS.surface} strokeWidth={2} />
+          <Text style={styles.centerButtonText}>진단</Text>
         </TouchableOpacity>
       </View>
 
@@ -88,7 +108,11 @@ export const BottomTabBar: React.FC = () => {
         onPress={() => setActiveTab("CHAT")}
         activeOpacity={0.7}
       >
-        <Text style={styles.tabIcon}>💬</Text>
+        <MessageSquare 
+          size={20} 
+          color={activeTab === "CHAT" ? COLORS.accent : COLORS.textSecondary} 
+          strokeWidth={1.75} 
+        />
         <Text style={[styles.tabLabel, activeTab === "CHAT" && styles.tabLabelActive]}>
           협의
         </Text>
@@ -100,7 +124,11 @@ export const BottomTabBar: React.FC = () => {
         onPress={() => setActiveTab("MY_STARTUP")}
         activeOpacity={0.7}
       >
-        <Text style={styles.tabIcon}>🚀</Text>
+        <Briefcase 
+          size={20} 
+          color={activeTab === "MY_STARTUP" ? COLORS.accent : COLORS.textSecondary} 
+          strokeWidth={1.75} 
+        />
         <Text style={[styles.tabLabel, activeTab === "MY_STARTUP" && styles.tabLabelActive]}>
           내 창업
         </Text>
@@ -111,20 +139,15 @@ export const BottomTabBar: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 68,
+    height: 64,
     flexDirection: "row",
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
+    borderTopColor: COLORS.line,
     paddingBottom: Platform.OS === "ios" ? 12 : 6,
     paddingTop: 6,
     alignItems: "center",
     justifyContent: "space-around",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 8,
     zIndex: 100,
   },
   tabItem: {
@@ -133,62 +156,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 2,
   },
-  tabIcon: {
-    fontSize: 20,
-    marginBottom: 2,
-  },
   tabLabel: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 11,
     fontWeight: "500",
-    color: "#8E8E93",
+    color: COLORS.textSecondary,
     letterSpacing: -0.2,
+    marginTop: 3,
   },
   tabLabelActive: {
-    color: COLORS.primary,
+    color: COLORS.accent,
     fontWeight: "700",
-  },
-  activeIndicator: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: COLORS.primary,
-    marginTop: 3,
   },
   centerTabContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: -20,
+    marginTop: -16,
   },
   centerButton: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: COLORS.primary,
+    width: 52,
+    height: 52,
+    borderRadius: METRICS.borderRadiusFull,
+    backgroundColor: COLORS.accent,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
-    borderWidth: 3,
-    borderColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: COLORS.surface,
   },
   centerButtonActive: {
-    backgroundColor: "#3B58E6",
-    transform: [{ scale: 1.05 }],
-  },
-  centerIconWrapper: {
-    marginBottom: -2,
-  },
-  centerIcon: {
-    fontSize: 19,
+    backgroundColor: COLORS.primary,
   },
   centerButtonText: {
-    fontSize: 9,
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 10,
     fontWeight: "800",
-    color: "#FFFFFF",
-    letterSpacing: -0.3,
+    color: COLORS.surface,
+    marginTop: 1,
   },
 });

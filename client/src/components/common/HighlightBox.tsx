@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, METRICS, TYPOGRAPHY } from "../../constants/theme";
 
 interface HighlightBoxProps {
   title?: string;
@@ -15,7 +15,7 @@ export const HighlightBox: React.FC<HighlightBoxProps> = ({
   children,
   style,
   contentStyle,
-  icon
+  icon,
 }) => {
   return (
     <View style={[styles.container, style]}>
@@ -36,11 +36,14 @@ export const HighlightBox: React.FC<HighlightBoxProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.primaryLight,
-    borderColor: COLORS.primary,
-    borderWidth: 1.5,
-    borderStyle: "dashed",
-    borderRadius: 14,
+    backgroundColor: COLORS.surface,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.accent,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: COLORS.line,
+    borderRadius: METRICS.borderRadiusSm,
     padding: 14,
     marginVertical: 8,
   },
@@ -53,15 +56,17 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   titleText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     fontWeight: "700",
-    color: COLORS.primary,
+    color: COLORS.accent,
     letterSpacing: -0.2,
   },
   contentText: {
+    fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 13,
     color: COLORS.textPrimary,
-    lineHeight: 19,
+    lineHeight: 20,
     letterSpacing: -0.2,
   },
 });
