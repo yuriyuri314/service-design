@@ -24,6 +24,7 @@ import { AiReviewScreen } from "./src/screens/AiReviewScreen";
 import { ChatScreen } from "./src/screens/ChatScreen";
 import { MyStartupScreen } from "./src/screens/MyStartupScreen";
 import { OwnerHomeScreen } from "./src/screens/OwnerHomeScreen";
+import { SpaceCameraModal } from "./src/components/camera/SpaceCameraModal";
 
 const MainAppContent: React.FC = () => {
   const { isOnboarded, role, activeTab } = useApp();
@@ -39,6 +40,7 @@ const MainAppContent: React.FC = () => {
       <View style={styles.screenContainer}>
         <OwnerHomeScreen />
         <BottomTabBar />
+        <SpaceCameraModal />
       </View>
     );
   }
@@ -54,6 +56,7 @@ const MainAppContent: React.FC = () => {
         {activeTab === "MY_STARTUP" && <MyStartupScreen />}
       </View>
       <BottomTabBar />
+      <SpaceCameraModal />
     </View>
   );
 };

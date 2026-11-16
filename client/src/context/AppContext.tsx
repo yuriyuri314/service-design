@@ -57,6 +57,9 @@ interface AppContextType {
   };
   startAiReviewForSpace: (spaceId: string) => void;
   startChatForSpace: (spaceId: string) => void;
+  addNewSpace: (newSpace: Space) => void;
+  isCameraModalOpen: boolean;
+  setIsCameraModalOpen: (open: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -83,11 +86,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     searchQuery: ""
   });
 
-  const [spaces] = useState<Space[]>(SPACES_DATA);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState<boolean>(false);
+  const [spaces, setSpaces] = useState<Space[]>(SPACES_DATA);
   const [stories] = useState<StartupStory[]>(STARTUP_STORIES_DATA);
   const [programs] = useState<SupportProgram[]>(SUPPORT_PROGRAMS_DATA);
   const [reports] = useState<ReviewReport[]>(REVIEW_REPORTS_DATA);
   const [chats, setChats] = useState<ChatRoom[]>(CHATS_DATA);
+
+  const addNewSpace = (newSpace: Space) => {
+    setSpaces(prev => [newSpace, ...prev]);
+  };
 
   const toggleBookmark = (spaceId: string) => {
     setBookmarks(prev => 
@@ -150,7 +158,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setStartupStep,
         youthInterest,
         startAiReviewForSpace,
-        startChatForSpace
+        startChatForSpace,
+        addNewSpace,
+        isCameraModalOpen,
+        setIsCameraModalOpen
       }}
     >
       {children}

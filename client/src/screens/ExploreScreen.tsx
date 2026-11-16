@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { View, StyleSheet } from "react-native";
-import { COLORS } from "../constants/theme";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Camera } from "lucide-react-native";
+import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Space } from "../types";
 import { Header } from "../components/common/Header";
@@ -10,7 +11,7 @@ import { BottomSheetList } from "../components/spaces/BottomSheetList";
 import { SpaceDetailModal } from "../components/spaces/SpaceDetailModal";
 
 export const ExploreScreen: React.FC = () => {
-  const { spaces, filters, selectedSpaceId, setSelectedSpaceId } = useApp();
+  const { spaces, filters, selectedSpaceId, setSelectedSpaceId, setIsCameraModalOpen } = useApp();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   // 필터링된 공간 리스트
@@ -73,6 +74,16 @@ export const ExploreScreen: React.FC = () => {
           onSelectSpace={handleSelectSpace}
         />
 
+        {/* 플로팅 현장 촬영 AI 발굴 버튼 */}
+        <TouchableOpacity 
+          style={styles.floatingCameraBtn}
+          onPress={() => setIsCameraModalOpen(true)}
+          activeOpacity={0.85}
+        >
+          <Camera size={16} color="#FFFFFF" strokeWidth={2} style={{ marginRight: 6 }} />
+          <Text style={styles.floatingCameraBtnText}>현장 사진 촬영 발굴</Text>
+        </TouchableOpacity>
+
         {/* 하단 3단계 바텀시트 리스트 */}
         <BottomSheetList
           spaces={filteredSpaces}
@@ -100,5 +111,24 @@ const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
     position: "relative",
+  },
+  floatingCameraBtn: {
+    position: "absolute",
+    top: 14,
+    right: 14,
+    backgroundColor: COLORS.accent,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
+    alignItems: "center",
+    zIndex: 99,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+  },
+  floatingCameraBtnText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "700",
   },
 });

@@ -7,7 +7,7 @@ import {
   TextInput, 
   TouchableOpacity 
 } from "react-native";
-import { Search, X, ArrowRight } from "lucide-react-native";
+import { Search, X, ArrowRight, Camera, ScanLine } from "lucide-react-native";
 import { COLORS, METRICS, TYPOGRAPHY } from "../constants/theme";
 import { useApp } from "../context/AppContext";
 import { Space, StartupStory, SupportProgram } from "../types";
@@ -26,7 +26,8 @@ export const HomeScreen: React.FC = () => {
     stories, 
     programs, 
     setActiveTab, 
-    setFilters 
+    setFilters,
+    setIsCameraModalOpen
   } = useApp();
 
   const [searchText, setSearchText] = useState("");
@@ -99,6 +100,33 @@ export const HomeScreen: React.FC = () => {
 
         {/* 카테고리 아이콘 그리드 */}
         <CategoryGrid />
+
+        {/* 현장 사진 촬영 AI 발굴 배너 */}
+        <TouchableOpacity 
+          style={styles.cameraScoutCard}
+          onPress={() => setIsCameraModalOpen(true)}
+          activeOpacity={0.85}
+        >
+          <View style={styles.cameraScoutLeft}>
+            <View style={styles.cameraScoutBadge}>
+              <Camera size={12} color="#FFFFFF" strokeWidth={2} style={{ marginRight: 4 }} />
+              <Text style={styles.cameraScoutBadgeText}>현장 촬영 AI 발굴</Text>
+            </View>
+            <Text style={styles.cameraScoutTitle}>
+              거리의 빈집·임대 사진 찍고{"\n"}전화번호·위치 자동 등록하기
+            </Text>
+            <Text style={styles.cameraScoutDesc}>
+              카메라로 건물을 촬영하면 AI가 현수막 연락처와 주소를 인식해 앱에 올려줍니다.
+            </Text>
+            <View style={styles.cameraScoutActionBtn}>
+              <Text style={styles.cameraScoutActionBtnText}>현장 사진 촬영 & 분석 시작</Text>
+              <ArrowRight size={13} color="#FFFFFF" strokeWidth={2} style={{ marginLeft: 4 }} />
+            </View>
+          </View>
+          <View style={styles.cameraScoutIconBox}>
+            <ScanLine size={32} color={COLORS.accent} strokeWidth={1.75} />
+          </View>
+        </TouchableOpacity>
 
         {/* 내 창업 진행 미니 카드 */}
         <MiniProgressCard />
@@ -372,5 +400,77 @@ const styles = StyleSheet.create({
     fontFamily: TYPOGRAPHY.bodyFont,
     fontSize: 12,
     color: COLORS.textSecondary,
+  },
+  cameraScoutCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: METRICS.borderRadiusMd,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.accent,
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  cameraScoutLeft: {
+    flex: 1,
+    marginRight: 10,
+  },
+  cameraScoutBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: COLORS.accent,
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  cameraScoutBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    fontWeight: "700",
+  },
+  cameraScoutTitle: {
+    fontFamily: TYPOGRAPHY.titleFont,
+    fontSize: 15,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
+    lineHeight: 20,
+    marginBottom: 4,
+  },
+  cameraScoutDesc: {
+    fontFamily: TYPOGRAPHY.bodyFont,
+    fontSize: 12,
+    color: COLORS.textSecondary,
+    lineHeight: 17,
+    marginBottom: 10,
+  },
+  cameraScoutActionBtn: {
+    alignSelf: "flex-start",
+    backgroundColor: COLORS.primary,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: METRICS.borderRadiusSm,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  cameraScoutActionBtnText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "700",
+  },
+  cameraScoutIconBox: {
+    width: 52,
+    height: 52,
+    borderRadius: METRICS.borderRadiusSm,
+    backgroundColor: COLORS.background,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
